@@ -3,7 +3,7 @@
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    int size = size();
+    int size;
 
     void clear() {
         for (int i = 0; i < size; i++) {
@@ -27,18 +27,18 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        int num = -1;
+        int index = -1;
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
-                num = i;
+                index = i;
                 break;
             }
         }
-        if (num == -1) {
+        if (index == -1) {
             System.out.println("No resume with uuid: \"" + uuid + "\"");
             return;
         }
-        for (int i = num; i < size; i++) {
+        for (int i = index; i < size; i++) {
             storage[i] = storage[i + 1];
         }
         size--;
@@ -56,11 +56,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        int count = 0;
-        for (Resume resume : storage) {
-            if (resume != null)
-                count++;
-        }
-        return count;
+        return size;
     }
 }
