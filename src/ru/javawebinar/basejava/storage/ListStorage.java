@@ -1,28 +1,50 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    {
-        resumes = new ArrayList<>();
+    public List<Resume> resumeList = new ArrayList<>();
+
+    @Override
+    public int size() {
+        return resumeList.size();
     }
 
     @Override
-    public Resume get(String uuid) {
-        ArrayList<Resume> list = (ArrayList<Resume>) resumes;
-        Resume resume = new Resume(uuid);
-        int index = list.indexOf(resume);
-        if (index == -1) {
-            throw new NotExistStorageException(uuid);
-        }
-        return list.get(index);
+    public void clear() {
+        resumeList.clear();
     }
 
-    public Collection<Resume> getResumes() {   //for MainTestListStorage
-        return resumes;
+    @Override
+    public Resume[] getAll() {
+        return resumeList.toArray(new Resume[size()]);
+    }
+
+    @Override
+    protected int getIndex(String uuid) {
+        return resumeList.indexOf(new Resume(uuid));
+    }
+
+    @Override
+    protected void factualUpdate(Resume resume, int index) {
+        resumeList.set(index, resume);
+    }
+
+    @Override
+    protected void factualSave(Resume resume, int index) {
+        resumeList.add(resume);
+    }
+
+    @Override
+    protected void factualDelete(int index) {
+        resumeList.remove(index);
+    }
+
+    @Override
+    protected Resume factualGet(int index) {
+        return resumeList.get(index);
     }
 }

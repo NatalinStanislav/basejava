@@ -4,49 +4,50 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.Collection;
-
 public abstract class AbstractStorage implements Storage {
-    protected Collection<Resume> resumes;
 
-    @Override
-    public void clear() {
-        resumes.clear();
-    }
-
-    @Override
     public void update(Resume resume) {
-        if (resumes.remove(resume)) {
-            resumes.add(resume);
-        } else {
+        int index = getIndex(resume.getUuid());
+        if (index < 0) {
             throw new NotExistStorageException(resume.getUuid());
+        } else {
+            factualUpdate(resume, index);
         }
     }
 
-    @Override
     public void save(Resume resume) {
-        if (resumes.contains(resume)) {
+        int index = getIndex(resume.getUuid());
+        if (index >= 0) {
             throw new ExistStorageException(resume.getUuid());
         } else {
-            resumes.add(resume);
+            factualSave(resume, index);
         }
     }
 
-    @Override
     public void delete(String uuid) {
-        Resume resume = new Resume(uuid);
-        if (!resumes.remove(resume)) {
+        int index = getIndex(uuid);
+        if (index < 0) {
+            throw new NotExistStorageException(uuid);
+        } else {
+            factualDelete(index);
+        }
+    }
+
+    public Resume get(String uuid) {
+        int index = getIndex(uuid);
+        if (index < 0) {
             throw new NotExistStorageException(uuid);
         }
+        return factualGet(index);
     }
 
-    @Override
-    public Resume[] getAll() {
-        return (Resume[]) resumes.toArray();
-    }
+    protected abstract int getIndex(String uuid);
 
-    @Override
-    public int size() {
-        return resumes.size();
-    }
+    protected abstract void factualUpdate(Resume resume, int index);
+
+    protected abstract void factualSave(Resume resume, int index);
+
+    protected abstract void factualDelete(int index);
+
+    protected abstract Resume factualGet(int index);
 }

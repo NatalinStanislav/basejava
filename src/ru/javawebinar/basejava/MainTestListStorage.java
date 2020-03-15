@@ -11,33 +11,11 @@ public class MainTestListStorage {
         ls.save(new Resume("3"));
         ls.save(new Resume("4"));
         ls.save(new Resume("5"));
-
+        System.out.println(ls.get("3"));
+        ls.delete("4");
         System.out.println(ls.size());
-        System.out.println(ls.getResumes());
-        ls.delete("3");
-        System.out.println(ls.size());
-        System.out.println(ls.getResumes());
-        ls.update(new Resume("5"));
-        System.out.println(ls.size());
-        System.out.println(ls.getResumes());
-        ls.clear();
-        System.out.println(ls.size());
-        System.out.println(ls.getResumes());
-
-        ls.save(new Resume("1"));
-        ls.save(new Resume("2"));
-        ls.save(new Resume("3"));
-        ls.save(new Resume("4"));
-        ls.save(new Resume("5"));
-        System.out.println(ls.get("2"));
-        System.out.println(ls.size());
-        System.out.println(ls.getResumes());
-
-        //ls.save(new Resume("1"));
-        //ls.delete("8");
-        //ls.update(new Resume("dummy"));
-        //ls.get("dummy");
-
-
+        ls.update(new Resume("2"));
+        for (Resume resume : ls.getAll())
+            System.out.print(resume + ", ");
     }
 }
