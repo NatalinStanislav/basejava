@@ -1,14 +1,12 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.exception.ExistStorageException;
-import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
-    protected Map<String, Resume> resumeMap = new HashMap<>();
+    private Map<String, Resume> resumeMap = new HashMap<>();
 
     @Override
     public int size() {
@@ -26,7 +24,7 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected String getIndex(String uuid) {
+    protected String getID(String uuid) {
         for (String str : resumeMap.keySet()) {
             if (str.equals(uuid)) {
                 return uuid;
@@ -36,40 +34,34 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void factualUpdate(Resume resume, Object object) {
-        resumeMap.put((String) object, resume);
+    protected void factualUpdate(Resume resume, Object key) {
+        resumeMap.put((String) key, resume);
     }
 
     @Override
-    protected void factualSave(Resume resume, Object object) {
-        resumeMap.put((String) object, resume);
+    protected void factualSave(Resume resume, Object key) {
+        resumeMap.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void factualDelete(Object object) {
-        resumeMap.remove(object);
+    protected void factualDelete(Object key) {
+        resumeMap.remove(key);
     }
 
     @Override
-    protected Resume factualGet(Object object) {
-        return resumeMap.get(object);
+    protected Resume factualGet(Object key) {
+        return resumeMap.get(key);
     }
 
     @Override
-    protected Object validateResumeNotExist(String uuid) {
-        String str = getIndex(uuid);
-        if (str == null) {
-            throw new NotExistStorageException(uuid);
-        }
-        return uuid;
+    protected boolean isExist(Object key) {
+        return key != null;
     }
 
     @Override
-    protected Object validateResumeExist(String uuid) {
-        String str = getIndex(uuid);
-        if (str != null) {
-            throw new ExistStorageException(uuid);
-        }
-        return uuid;
+    protected boolean isNotExist(Object key) {
+        return key == null;
     }
+
+
 }

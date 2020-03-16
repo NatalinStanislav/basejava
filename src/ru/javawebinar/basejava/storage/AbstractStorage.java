@@ -1,40 +1,59 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
+import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
     public void update(Resume resume) {
-        Object object = validateResumeNotExist(resume.getUuid());
-        factualUpdate(resume, object);
+        Object ID = validateResumeNotExist(resume.getUuid());
+        factualUpdate(resume, ID);
     }
 
     public void save(Resume resume) {
-        Object object = validateResumeExist(resume.getUuid());
-        factualSave(resume, object);
+        Object ID = validateResumeExist(resume.getUuid());
+        factualSave(resume, ID);
     }
 
     public void delete(String uuid) {
-        Object object = validateResumeNotExist(uuid);
-        factualDelete(object);
+        Object ID = validateResumeNotExist(uuid);
+        factualDelete(ID);
     }
 
     public Resume get(String uuid) {
-        Object object = validateResumeNotExist(uuid);
-        return factualGet(object);
+        Object ID = validateResumeNotExist(uuid);
+        return factualGet(ID);
     }
 
-    protected abstract Object getIndex(String uuid);
+    protected Object validateResumeNotExist(String uuid) {
+        Object ID = getID(uuid);
+        if (isNotExist(ID)) {
+            throw new NotExistStorageException(uuid);
+        }
+        return ID;
+    }
 
-    protected abstract void factualUpdate(Resume resume, Object object);
+    protected Object validateResumeExist(String uuid) {
+        Object ID = getID(uuid);
+        if (isExist(ID)) {
+            throw new ExistStorageException(uuid);
+        }
+        return ID;
 
-    protected abstract void factualSave(Resume resume, Object object);
+    }
 
-    protected abstract void factualDelete(Object object);
+    protected abstract Object getID(String uuid);
 
-    protected abstract Resume factualGet(Object object);
+    protected abstract void factualUpdate(Resume resume, Object ID);
 
-    protected abstract Object validateResumeNotExist(String uuid);
+    protected abstract void factualSave(Resume resume, Object ID);
 
-    protected abstract Object validateResumeExist(String uuid);
+    protected abstract void factualDelete(Object ID);
+
+    protected abstract Resume factualGet(Object ID);
+
+    protected abstract boolean isExist(Object object);
+
+    protected abstract boolean isNotExist(Object object);
 }

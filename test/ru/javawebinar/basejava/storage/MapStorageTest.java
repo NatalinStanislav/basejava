@@ -7,7 +7,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
 
-public class MapStorageTest extends AbstractArrayStorageTest {
+public class MapStorageTest extends AbstractStorageTest {
     public MapStorageTest() {
         super(new MapStorage());
     }
@@ -25,6 +25,5 @@ public class MapStorageTest extends AbstractArrayStorageTest {
     @Test
     @Override
     public void saveOverflow() throws Exception {
-        super.saveOverflow();
     }
 }

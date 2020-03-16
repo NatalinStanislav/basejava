@@ -1,14 +1,12 @@
 package ru.javawebinar.basejava.storage;
 
-import ru.javawebinar.basejava.exception.ExistStorageException;
-import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    protected List<Resume> resumeList = new ArrayList<>();
+    private List<Resume> resumeList = new ArrayList<>();
 
     @Override
     public int size() {
@@ -26,8 +24,13 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Integer getIndex(String uuid) {
-        return resumeList.indexOf(new Resume(uuid));
+    protected Integer getID(String uuid) {
+        for (int i = 0; i < resumeList.size(); i++) {
+            if (resumeList.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -51,21 +54,12 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object validateResumeNotExist(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
-        return index;
+    protected boolean isExist(Object index) {
+        return (int) index >= 0;
     }
 
     @Override
-    protected Object validateResumeExist(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            throw new ExistStorageException(uuid);
-        }
-        return index;
+    protected boolean isNotExist(Object index) {
+        return (int) index < 0;
     }
-
 }
