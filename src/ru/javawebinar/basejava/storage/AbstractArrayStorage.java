@@ -57,11 +57,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return (int) index >= 0;
     }
 
-    @Override
-    protected boolean isNotExist(Object index) {
-        return (int) index < 0;
-    }
-
     protected abstract void fillDeletedElement(int index);
 
     protected abstract void insertElement(Resume resume, int index);

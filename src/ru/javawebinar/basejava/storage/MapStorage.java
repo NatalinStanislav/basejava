@@ -25,12 +25,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected String getID(String uuid) {
-        for (String str : resumeMap.keySet()) {
-            if (str.equals(uuid)) {
-                return uuid;
-            }
-        }
-        return null;
+        return resumeMap.containsKey(uuid) ? uuid : null;
     }
 
     @Override
@@ -57,11 +52,4 @@ public class MapStorage extends AbstractStorage {
     protected boolean isExist(Object key) {
         return key != null;
     }
-
-    @Override
-    protected boolean isNotExist(Object key) {
-        return key == null;
-    }
-
-
 }

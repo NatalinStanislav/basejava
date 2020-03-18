@@ -7,53 +7,51 @@ import ru.javawebinar.basejava.model.Resume;
 public abstract class AbstractStorage implements Storage {
 
     public void update(Resume resume) {
-        Object ID = validateResumeNotExist(resume.getUuid());
-        factualUpdate(resume, ID);
+        Object iD = validateResumeNotExist(resume.getUuid());
+        factualUpdate(resume, iD);
     }
 
     public void save(Resume resume) {
-        Object ID = validateResumeExist(resume.getUuid());
-        factualSave(resume, ID);
+        Object iD = validateResumeExist(resume.getUuid());
+        factualSave(resume, iD);
     }
 
     public void delete(String uuid) {
-        Object ID = validateResumeNotExist(uuid);
-        factualDelete(ID);
+        Object iD = validateResumeNotExist(uuid);
+        factualDelete(iD);
     }
 
     public Resume get(String uuid) {
-        Object ID = validateResumeNotExist(uuid);
-        return factualGet(ID);
+        Object iD = validateResumeNotExist(uuid);
+        return factualGet(iD);
     }
 
     protected Object validateResumeNotExist(String uuid) {
-        Object ID = getID(uuid);
-        if (isNotExist(ID)) {
+        Object iD = getID(uuid);
+        if (!isExist(iD)) {
             throw new NotExistStorageException(uuid);
         }
-        return ID;
+        return iD;
     }
 
     protected Object validateResumeExist(String uuid) {
-        Object ID = getID(uuid);
-        if (isExist(ID)) {
+        Object iD = getID(uuid);
+        if (isExist(iD)) {
             throw new ExistStorageException(uuid);
         }
-        return ID;
+        return iD;
 
     }
 
     protected abstract Object getID(String uuid);
 
-    protected abstract void factualUpdate(Resume resume, Object ID);
+    protected abstract void factualUpdate(Resume resume, Object iD);
 
-    protected abstract void factualSave(Resume resume, Object ID);
+    protected abstract void factualSave(Resume resume, Object iD);
 
-    protected abstract void factualDelete(Object ID);
+    protected abstract void factualDelete(Object iD);
 
-    protected abstract Resume factualGet(Object ID);
+    protected abstract Resume factualGet(Object iD);
 
-    protected abstract boolean isExist(Object object);
-
-    protected abstract boolean isNotExist(Object object);
+    protected abstract boolean isExist(Object iD);
 }
