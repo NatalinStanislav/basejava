@@ -8,6 +8,9 @@ import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -19,16 +22,21 @@ public abstract class AbstractStorageTest {
     protected static final String UUID_3 = "uuid3";
     protected static final String UUID_4 = "uuid4";
 
+    protected static final String NAME_1 = "Alexandr Ivanov";
+    protected static final String NAME_2 = "Alexandr Ivanov";
+    protected static final String NAME_3 = "Corona Virus";
+    protected static final String NAME_4 = "Maria Orlova";
+
     protected static final Resume RESUME_1;
     protected static final Resume RESUME_2;
     protected static final Resume RESUME_3;
     protected static final Resume RESUME_4;
 
     static {
-        RESUME_1 = new Resume(UUID_1);
-        RESUME_2 = new Resume(UUID_2);
-        RESUME_3 = new Resume(UUID_3);
-        RESUME_4 = new Resume(UUID_4);
+        RESUME_1 = new Resume(UUID_1, NAME_1);
+        RESUME_2 = new Resume(UUID_2, NAME_2);
+        RESUME_3 = new Resume(UUID_3, NAME_3);
+        RESUME_4 = new Resume(UUID_4, NAME_4);
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -56,7 +64,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() throws Exception {
-        Resume newResume = new Resume(UUID_1);
+        Resume newResume = new Resume(UUID_1, "Anyone");
         storage.update(newResume);
         assertSame(newResume, storage.get(UUID_1));
     }
@@ -67,9 +75,12 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() throws Exception {
-        Resume[] resumes = {new Resume(UUID_1), new Resume(UUID_2), new Resume(UUID_3)};
-        Assert.assertArrayEquals(resumes, storage.getAll());
+    public void getAllSorted() throws Exception {
+        List<Resume> list  = new ArrayList<>();
+        list.add(new Resume(UUID_1, NAME_1));
+        list.add(new Resume(UUID_2, NAME_2));
+        list.add(new Resume(UUID_3, NAME_3));
+        Assert.assertEquals(list, storage.getAllSorted());
     }
 
     @Test

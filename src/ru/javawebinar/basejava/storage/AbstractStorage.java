@@ -4,7 +4,20 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.Comparator;
+
 public abstract class AbstractStorage implements Storage {
+    /*
+    private static class ResumeComparator implements Comparator<Resume> {
+        @Override
+        public int compare(Resume o1, Resume o2) {
+            return o1.getUuid().compareTo(o2.getUuid());
+        }
+    }
+    */
+
+    protected static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
+    protected static final Comparator<Resume> RESUME_COMPARATOR_BY_NAME = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
     public void update(Resume resume) {
         Object iD = validateResumeNotExist(resume.getUuid());
@@ -40,7 +53,6 @@ public abstract class AbstractStorage implements Storage {
             throw new ExistStorageException(uuid);
         }
         return iD;
-
     }
 
     protected abstract Object getID(String uuid);
