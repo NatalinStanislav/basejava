@@ -23,15 +23,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public List<Resume> getAllSorted() {
-        List<Resume> list = Arrays.asList(Arrays.copyOfRange(storage, 0, size));
-        list.sort(RESUME_COMPARATOR_BY_NAME);
-        return list;
-    }
-
     protected void factualUpdate(Resume resume, Object index) {
         storage[(int) index] = resume;
     }
@@ -58,6 +49,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected boolean isExist(Object index) {
         return (int) index >= 0;
+    }
+
+    protected List<Resume> getResumeList() {
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 
     protected abstract void fillDeletedElement(int index);

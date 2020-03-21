@@ -19,13 +19,6 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>(resumeList);
-        list.sort(RESUME_COMPARATOR_BY_NAME);
-        return list;
-    }
-
-    @Override
     protected Integer getID(String uuid) {
         for (int i = 0; i < resumeList.size(); i++) {
             if (resumeList.get(i).getUuid().equals(uuid)) {
@@ -58,5 +51,10 @@ public class ListStorage extends AbstractStorage {
     @Override
     protected boolean isExist(Object index) {
         return (int) index >= 0;
+    }
+
+    @Override
+    protected List<Resume> getResumeList() {
+        return new ArrayList<>(resumeList);
     }
 }

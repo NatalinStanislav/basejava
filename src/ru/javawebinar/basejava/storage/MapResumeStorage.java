@@ -32,7 +32,7 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     protected Resume factualGet(Object key) {
-        return resumeMap.get(((Resume) key).getUuid());
+        return (Resume) key;
     }
 
     @Override
@@ -41,15 +41,13 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    public void clear() {
-        resumeMap.clear();
+    protected List<Resume> getResumeList() {
+        return new ArrayList<>(resumeMap.values());
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>(resumeMap.values());
-        list.sort(RESUME_COMPARATOR_BY_NAME);
-        return list;
+    public void clear() {
+        resumeMap.clear();
     }
 
     @Override

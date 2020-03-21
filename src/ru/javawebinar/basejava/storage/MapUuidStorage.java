@@ -18,13 +18,6 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>(resumeMap.values());
-        list.sort(RESUME_COMPARATOR_BY_NAME);
-        return list;
-    }
-
-    @Override
     protected String getID(String uuid) {
         return uuid;
     }
@@ -52,5 +45,10 @@ public class MapUuidStorage extends AbstractStorage {
     @Override
     protected boolean isExist(Object key) {
         return resumeMap.containsKey(key);
+    }
+
+    @Override
+    protected List<Resume> getResumeList() {
+        return new ArrayList<>(resumeMap.values());
     }
 }
