@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10_000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -23,32 +23,32 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    protected void factualUpdate(Resume resume, Object index) {
-        storage[(int) index] = resume;
+    protected void factualUpdate(Resume resume, Integer index) {
+        storage[index] = resume;
     }
 
-    protected void factualSave(Resume resume, Object index) {
+    protected void factualSave(Resume resume, Integer index) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         } else {
-            insertElement(resume, (int) index);
+            insertElement(resume, index);
             size++;
         }
     }
 
-    protected void factualDelete(Object index) {
-        fillDeletedElement((int) index);
+    protected void factualDelete(Integer index) {
+        fillDeletedElement(index);
         storage[size - 1] = null;
         size--;
     }
 
-    protected Resume factualGet(Object index) {
-        return storage[(int) index];
+    protected Resume factualGet(Integer index) {
+        return storage[index];
     }
 
     @Override
-    protected boolean isExist(Object index) {
-        return (int) index >= 0;
+    protected boolean isExist(Integer index) {
+        return index >= 0;
     }
 
     protected List<Resume> getResumeList() {

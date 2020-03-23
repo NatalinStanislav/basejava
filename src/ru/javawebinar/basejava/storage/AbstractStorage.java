@@ -4,74 +4,75 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
 
-public abstract class AbstractStorage implements Storage {
-    /*
-    private static class ResumeComparator implements Comparator<Resume> {
-        @Override
-        public int compare(Resume o1, Resume o2) {
-            return o1.getUuid().compareTo(o2.getUuid());
-        }
-    }
-    */
+public abstract class AbstractStorage<T> implements Storage {
 
-    protected static final Comparator<Resume> RESUME_COMPARATOR_BY_NAME_AND_UUID = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
+    //    protected final Logger LOG = Logger.getLogger(getClass().getName());
+    private static final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
     public void update(Resume resume) {
-        Object iD = validateResumeNotExist(resume.getUuid());
+        LOG.info("Update " + resume);
+        T iD = validateResumeNotExist(resume.getUuid());
         factualUpdate(resume, iD);
     }
 
     public void save(Resume resume) {
-        Object iD = validateResumeExist(resume.getUuid());
+        LOG.info("Save " + resume);
+        T iD = validateResumeExist(resume.getUuid());
         factualSave(resume, iD);
     }
 
     public void delete(String uuid) {
-        Object iD = validateResumeNotExist(uuid);
+        LOG.info("Delete " + uuid);
+        T iD = validateResumeNotExist(uuid);
         factualDelete(iD);
     }
 
     public Resume get(String uuid) {
-        Object iD = validateResumeNotExist(uuid);
+        LOG.info("Get " + uuid);
+        T iD = validateResumeNotExist(uuid);
         return factualGet(iD);
     }
 
     public List<Resume> getAllSorted() {
+        LOG.info("getAllSorted");
         List<Resume> list = getResumeList();
-        list.sort(RESUME_COMPARATOR_BY_NAME_AND_UUID);
+        Collections.sort(list);
         return list;
     }
 
-    protected Object validateResumeNotExist(String uuid) {
-        Object iD = getID(uuid);
+    protected T validateResumeNotExist(String uuid) {
+        T iD = getID(uuid);
         if (!isExist(iD)) {
+            LOG.warning("Resume " + uuid + " not exist");
             throw new NotExistStorageException(uuid);
         }
         return iD;
     }
 
-    protected Object validateResumeExist(String uuid) {
-        Object iD = getID(uuid);
+    protected T validateResumeExist(String uuid) {
+        T iD = getID(uuid);
         if (isExist(iD)) {
+            LOG.warning("Resume " + uuid + " already exist");
             throw new ExistStorageException(uuid);
         }
         return iD;
     }
 
-    protected abstract Object getID(String uuid);
+    protected abstract T getID(String uuid);
 
-    protected abstract void factualUpdate(Resume resume, Object iD);
+    protected abstract void factualUpdate(Resume resume, T iD);
 
-    protected abstract void factualSave(Resume resume, Object iD);
+    protected abstract void factualSave(Resume resume, T iD);
 
-    protected abstract void factualDelete(Object iD);
+    protected abstract void factualDelete(T iD);
 
-    protected abstract Resume factualGet(Object iD);
+    protected abstract Resume factualGet(T iD);
 
-    protected abstract boolean isExist(Object iD);
+    protected abstract boolean isExist(T iD);
 
     protected abstract List<Resume> getResumeList();
 }

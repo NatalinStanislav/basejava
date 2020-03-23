@@ -27,8 +27,8 @@ public abstract class AbstractStorageTest {
     protected static final Resume RESUME_4;
 
     static {
-        RESUME_1 = new Resume(UUID_1, "Alexandr Ivanov");
-        RESUME_2 = new Resume(UUID_2, "Alexandr Ivanov");
+        RESUME_1 = new Resume(UUID_1, "Alexander Ivanov");
+        RESUME_2 = new Resume(UUID_2, "Alexander Ivanov");
         RESUME_3 = new Resume(UUID_3, "Corona Virus");
         RESUME_4 = new Resume(UUID_4, "Maria Orlova");
     }

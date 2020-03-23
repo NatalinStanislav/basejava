@@ -4,7 +4,7 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.*;
 
-public class MapUuidStorage extends AbstractStorage {
+public class MapUuidStorage extends AbstractStorage<String> {
     private Map<String, Resume> resumeMap = new HashMap<>();
 
     @Override
@@ -23,27 +23,27 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    protected void factualUpdate(Resume resume, Object key) {
-        resumeMap.put((String) key, resume);
+    protected void factualUpdate(Resume resume, String key) {
+        resumeMap.put(key, resume);
     }
 
     @Override
-    protected void factualSave(Resume resume, Object key) {
+    protected void factualSave(Resume resume, String key) {
         resumeMap.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void factualDelete(Object key) {
+    protected void factualDelete(String key) {
         resumeMap.remove(key);
     }
 
     @Override
-    protected Resume factualGet(Object key) {
+    protected Resume factualGet(String key) {
         return resumeMap.get(key);
     }
 
     @Override
-    protected boolean isExist(Object key) {
+    protected boolean isExist(String key) {
         return resumeMap.containsKey(key);
     }
 
