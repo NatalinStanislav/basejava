@@ -25,15 +25,15 @@ public class ResumeTestData {
         }
     }
 
-    private static Map<Contacts, String> getContacts() {
-        Map<Contacts, String> contacts = new HashMap<>();
-        contacts.put(Contacts.PHONE_NUMBER, "+7(921) 855-0482");
-        contacts.put(Contacts.SKYPE_ACCOUNT, "grigory.kislin");
-        contacts.put(Contacts.EMAIL, "gkislin@yandex.ru");
-        contacts.put(Contacts.LINKEDIN_PROFILE, "https://www.linkedin.com/in/gkislin");
-        contacts.put(Contacts.GITHUB_PROFILE, "https://github.com/gkislin");
-        contacts.put(Contacts.STACKOVERFLOW_PROFILE, "https://stackoverflow.com/users/548473/grigory-kislin");
-        contacts.put(Contacts.HOME_PAGE, "http://gkislin.ru/");
+    private static Map<ContactType, String> getContacts() {
+        Map<ContactType, String> contacts = new HashMap<>();
+        contacts.put(ContactType.PHONE_NUMBER, "+7(921) 855-0482");
+        contacts.put(ContactType.SKYPE_ACCOUNT, "grigory.kislin");
+        contacts.put(ContactType.EMAIL, "gkislin@yandex.ru");
+        contacts.put(ContactType.LINKEDIN_PROFILE, "https://www.linkedin.com/in/gkislin");
+        contacts.put(ContactType.GITHUB_PROFILE, "https://github.com/gkislin");
+        contacts.put(ContactType.STACKOVERFLOW_PROFILE, "https://stackoverflow.com/users/548473/grigory-kislin");
+        contacts.put(ContactType.HOME_PAGE, "http://gkislin.ru/");
         return contacts;
     }
 
@@ -52,10 +52,10 @@ public class ResumeTestData {
         ListTextSection qualification = new ListTextSection();
         qualification.setInfoList(getQualificationList());
 
-        ChronoDateSection experience = new ChronoDateSection();
+        PositionSection experience = new PositionSection();
         experience.setSectionList(getWorkExperienceList());
 
-        ChronoDateSection education = new ChronoDateSection();
+        PositionSection education = new PositionSection();
         education.setSectionList(getEducationList());
 
         sections.put(SectionType.OBJECTIVE, objective);
@@ -98,39 +98,39 @@ public class ResumeTestData {
         return list;
     }
 
-    public static List<DateSection> getWorkExperienceList() {
-        List<DateSection> list = new ArrayList<>();
+    public static List<Position> getWorkExperienceList() {
+        List<Position> list = new ArrayList<>();
 
-        DateSection javaProjects = new DateSection("Java Online Projects", "http://javaops.ru/");
-        javaProjects.getPlacesMap().put(new TimePeriod(YearMonth.of(2013, 10), YearMonth.now()), "Автор проекта.\n" +
+        Position javaProjects = new Position("Java Online Projects", "http://javaops.ru/", YearMonth.of(2013, 10), YearMonth.now());
+        javaProjects.getPlacesMap().put(javaProjects.getPeriod(), "Автор проекта.\n" +
                 "Создание, организация и проведение Java онлайн проектов и стажировок.");
 
-        DateSection wrike = new DateSection("Wrike", "https://www.wrike.com/");
-        wrike.getPlacesMap().put(new TimePeriod(YearMonth.of(2014, 10), YearMonth.of(2016, 1)), "Старший разработчик (backend)\n" +
+        Position wrike = new Position("Wrike", "https://www.wrike.com/", YearMonth.of(2014, 10), YearMonth.of(2016, 1));
+        wrike.getPlacesMap().put(wrike.getPeriod(), "Старший разработчик (backend)\n" +
                 "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
 
-        DateSection ritCenter = new DateSection("RIT Center", null);
-        ritCenter.getPlacesMap().put(new TimePeriod(YearMonth.of(2012, 4), YearMonth.of(2014, 10)), "Java архитектор\n" +
+        Position ritCenter = new Position("RIT Center", null, YearMonth.of(2012, 4), YearMonth.of(2014, 10));
+        ritCenter.getPlacesMap().put(ritCenter.getPeriod(), "Java архитектор\n" +
                 "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python");
 
-        DateSection luxoft = new DateSection("Luxoft (Deutsche Bank)", "https://www.luxoft.com/");
-        luxoft.getPlacesMap().put(new TimePeriod(YearMonth.of(2010, 12), YearMonth.of(2012, 4)), "Ведущий программист\n" +
+        Position luxoft = new Position("Luxoft (Deutsche Bank)", "https://www.luxoft.com/", YearMonth.of(2010, 12), YearMonth.of(2012, 4));
+        luxoft.getPlacesMap().put(luxoft.getPeriod(), "Ведущий программист\n" +
                 "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
 
-        DateSection yota = new DateSection("Yota", "https://www.yota.ru/");
-        yota.getPlacesMap().put(new TimePeriod(YearMonth.of(2008, 6), YearMonth.of(2010, 12)), "Ведущий специалист\n" +
+        Position yota = new Position("Yota", "https://www.yota.ru/", YearMonth.of(2008, 6), YearMonth.of(2010, 12));
+        yota.getPlacesMap().put(yota.getPeriod(), "Ведущий специалист\n" +
                 "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)");
 
-        DateSection enkata = new DateSection("Enkata", "https://www.pega.com/products/pega-platform/robotic-automation");
-        enkata.getPlacesMap().put(new TimePeriod(YearMonth.of(2007, 3), YearMonth.of(2008, 6)), "Разработчик ПО\n" +
+        Position enkata = new Position("Enkata", "https://www.pega.com/products/pega-platform/robotic-automation", YearMonth.of(2007, 3), YearMonth.of(2008, 6));
+        enkata.getPlacesMap().put(enkata.getPeriod(), "Разработчик ПО\n" +
                 "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).");
 
-        DateSection siemensAG = new DateSection("Siemens AG", "https://www.siemens.com/ru/ru/home.html");
-        siemensAG.getPlacesMap().put(new TimePeriod(YearMonth.of(2005, 1), YearMonth.of(2007, 2)), "Разработчик ПО\n" +
+        Position siemensAG = new Position("Siemens AG", "https://www.siemens.com/ru/ru/home.html", YearMonth.of(2005, 1), YearMonth.of(2007, 2));
+        siemensAG.getPlacesMap().put(siemensAG.getPeriod(), "Разработчик ПО\n" +
                 "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).");
 
-        DateSection alcatel = new DateSection("Alcatel", "http://www.alcatel.ru/");
-        alcatel.getPlacesMap().put(new TimePeriod(YearMonth.of(1997, 9), YearMonth.of(2005, 1)), "Инженер по аппаратному и программному тестированию\n" +
+        Position alcatel = new Position("Alcatel", "http://www.alcatel.ru/", YearMonth.of(1997, 9), YearMonth.of(2005, 1));
+        alcatel.getPlacesMap().put(alcatel.getPeriod(), "Инженер по аппаратному и программному тестированию\n" +
                 "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
 
         list.add(javaProjects);
@@ -144,27 +144,27 @@ public class ResumeTestData {
         return list;
     }
 
-    public static List<DateSection> getEducationList() {
-        List<DateSection> list = new ArrayList<>();
+    public static List<Position> getEducationList() {
+        List<Position> list = new ArrayList<>();
 
-        DateSection coursera = new DateSection("Coursera", "https://www.coursera.org/learn/progfun1");
-        coursera.getPlacesMap().put(new TimePeriod(YearMonth.of(2013, 3), YearMonth.of(2013, 5)), "\"Functional Programming Principles in Scala\" by Martin Odersky");
+        Position coursera = new Position("Coursera", "https://www.coursera.org/learn/progfun1", YearMonth.of(2013, 3), YearMonth.of(2013, 5));
+        coursera.getPlacesMap().put(coursera.getPeriod(), "\"Functional Programming Principles in Scala\" by Martin Odersky");
 
-        DateSection luxoft = new DateSection("Luxoft", "https://www.luxoft-training.ru/kurs/obektno-orientirovannyy_analiz_i_proektirovanie_na_uml.html");
-        luxoft.getPlacesMap().put(new TimePeriod(YearMonth.of(2011, 3), YearMonth.of(2011, 4)), "\tКурс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"");
+        Position luxoft = new Position("Luxoft", "https://www.luxoft-training.ru/kurs/obektno-orientirovannyy_analiz_i_proektirovanie_na_uml.html", YearMonth.of(2011, 3), YearMonth.of(2011, 4));
+        luxoft.getPlacesMap().put(luxoft.getPeriod(), "\tКурс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"");
 
-        DateSection siemensAG = new DateSection("Siemens AG", "https://new.siemens.com/ru/ru.html");
-        siemensAG.getPlacesMap().put(new TimePeriod(YearMonth.of(2005, 1), YearMonth.of(2005, 4)), "3 месяца обучения мобильным IN сетям (Берлин)");
+        Position siemensAG = new Position("Siemens AG", "https://new.siemens.com/ru/ru.html", YearMonth.of(2005, 1), YearMonth.of(2005, 4));
+        siemensAG.getPlacesMap().put(siemensAG.getPeriod(), "3 месяца обучения мобильным IN сетям (Берлин)");
 
-        DateSection alcatel = new DateSection("Alcatel", "http://www.alcatel.ru/");
-        alcatel.getPlacesMap().put(new TimePeriod(YearMonth.of(1997, 9), YearMonth.of(1998, 3)), "6 месяцев обучения цифровым телефонным сетям (Москва)");
+        Position alcatel = new Position("Alcatel", "http://www.alcatel.ru/", YearMonth.of(1997, 9), YearMonth.of(1998, 3));
+        alcatel.getPlacesMap().put(alcatel.getPeriod(), "6 месяцев обучения цифровым телефонным сетям (Москва)");
 
-        DateSection itmo = new DateSection("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "https://itmo.ru/ru/");
-        itmo.getPlacesMap().put(new TimePeriod(YearMonth.of(1993, 9), YearMonth.of(1996, 7)), "Аспирантура (программист С, С++)");
-        itmo.getPlacesMap().put(new TimePeriod(YearMonth.of(1987, 9), YearMonth.of(1993, 7)), "Инженер (программист Fortran, C)");
+        Position itmo = new Position("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "https://itmo.ru/ru/", YearMonth.of(1993, 9), YearMonth.of(1996, 7));
+        itmo.getPlacesMap().put(itmo.getPeriod(), "Аспирантура (программист С, С++)");
+        itmo.getPlacesMap().put(new Position.TimePeriod(YearMonth.of(1987, 9), YearMonth.of(1993, 7)), "Инженер (программист Fortran, C)");
 
-        DateSection school = new DateSection("Заочная физико-техническая школа при МФТИ", "http://www.school.mipt.ru/");
-        school.getPlacesMap().put(new TimePeriod(YearMonth.of(1984, 9), YearMonth.of(1987, 6)), "Закончил с отличием");
+        Position school = new Position("Заочная физико-техническая школа при МФТИ", "http://www.school.mipt.ru/", YearMonth.of(1984, 9), YearMonth.of(1987, 6));
+        school.getPlacesMap().put(school.getPeriod(), "Закончил с отличием");
 
         list.add(coursera);
         list.add(luxoft);

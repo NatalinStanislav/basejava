@@ -12,7 +12,7 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private Map<Contacts, String> contacts;
+    private Map<ContactType, String> contacts;
     private Map<SectionType, TextSection> sections;
 
     public Resume(String fullName) {
@@ -30,11 +30,11 @@ public class Resume implements Comparable<Resume> {
         return uuid;
     }
 
-    public Map<Contacts, String> getContacts() {
+    public Map<ContactType, String> getContacts() {
         return contacts;
     }
 
-    public void setContacts(Map<Contacts, String> contacts) {
+    public void setContacts(Map<ContactType, String> contacts) {
         this.contacts = contacts;
     }
 
@@ -50,19 +50,16 @@ public class Resume implements Comparable<Resume> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Resume resume = (Resume) o;
-
-        if (!uuid.equals(resume.uuid)) return false;
-        return fullName.equals(resume.fullName);
-
+        return Objects.equals(uuid, resume.uuid) &&
+                Objects.equals(fullName, resume.fullName) &&
+                Objects.equals(contacts, resume.contacts) &&
+                Objects.equals(sections, resume.sections);
     }
 
     @Override
     public int hashCode() {
-        int result = uuid.hashCode();
-        result = 31 * result + fullName.hashCode();
-        return result;
+        return Objects.hash(uuid, fullName, contacts, sections);
     }
 
     @Override
