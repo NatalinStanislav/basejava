@@ -1,19 +1,17 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * ru.javawebinar.basejava.model.Resume class
- */
 public class Resume implements Comparable<Resume> {
 
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private Map<ContactType, String> contacts;
-    private Map<SectionType, TextSection> sections;
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -30,20 +28,12 @@ public class Resume implements Comparable<Resume> {
         return uuid;
     }
 
-    public Map<ContactType, String> getContacts() {
-        return contacts;
+    public String getContact(ContactType type) {
+        return contacts.get(type);
     }
 
-    public void setContacts(Map<ContactType, String> contacts) {
-        this.contacts = contacts;
-    }
-
-    public Map<SectionType, TextSection> getSections() {
-        return sections;
-    }
-
-    public void setSections(Map<SectionType, TextSection> sections) {
-        this.sections = sections;
+    public Section getSection(SectionType type) {
+        return sections.get(type);
     }
 
     @Override
@@ -51,15 +41,16 @@ public class Resume implements Comparable<Resume> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return Objects.equals(uuid, resume.uuid) &&
-                Objects.equals(fullName, resume.fullName) &&
-                Objects.equals(contacts, resume.contacts) &&
-                Objects.equals(sections, resume.sections);
+        if (!uuid.equals(resume.uuid)) return false;
+        return fullName.equals(resume.fullName);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName, contacts, sections);
+        int result = uuid.hashCode();
+        result = 31 * result + fullName.hashCode();
+        return result;
     }
 
     @Override
