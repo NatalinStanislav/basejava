@@ -1,33 +1,25 @@
 package ru.javawebinar.basejava;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 public class MainFile {
     public static void main(String[] args) {
-        String filePath = ".\\.gitignore";
-
-        File file = new File(filePath);
-        try {
-            System.out.println(file.getCanonicalPath());
-        } catch (IOException e) {
-            throw new RuntimeException("Error", e);
-        }
-
-        File dir = new File("./src/ru/javawebinar/basejava");
-        System.out.println(dir.isDirectory());
-        String[] list = dir.list();
+        File dir = new File("D:/BaseJava/basejava");
+        File[] list = dir.listFiles();
         if (list != null) {
-            for (String name : list) {
-                System.out.println(name);
+            for (File file : list) {
+                recursiveFileSearch(file);
             }
         }
+    }
 
-        try (FileInputStream fis = new FileInputStream(filePath)) {
-            System.out.println(fis.read());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public static void recursiveFileSearch(File file) {
+        if (file.isDirectory()) {
+            for (File f : file.listFiles()) {
+                recursiveFileSearch(f);
+            }
+        } else {
+            System.out.println(file.getName());
         }
     }
 }
