@@ -4,7 +4,7 @@ import java.io.File;
 
 public class MainFile {
     public static void main(String[] args) {
-        File dir = new File("D:/BaseJava/basejava");
+        File dir = new File("D:/BaseJava/basejava/src/ru/javawebinar/basejava");
         File[] list = dir.listFiles();
         if (list != null) {
             for (File file : list) {
@@ -15,11 +15,16 @@ public class MainFile {
 
     public static void recursiveFileSearch(File file) {
         if (file.isDirectory()) {
-            for (File f : file.listFiles()) {
-                recursiveFileSearch(f);
+            File[] list = file.listFiles();
+            if (list != null) {
+                for (File f : list) {
+                    recursiveFileSearch(f);
+                }
             }
         } else {
             System.out.println(file.getName());
         }
     }
+
+
 }

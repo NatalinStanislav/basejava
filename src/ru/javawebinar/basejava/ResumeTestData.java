@@ -14,13 +14,13 @@ public class ResumeTestData {
         resume.setContacts(getContacts());
         resume.setSections(getSections());
 
-        for (Map.Entry entry : resume.getContacts().entrySet()) {
+        for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
             System.out.println(entry);
         }
 
         System.out.println("----------------------------------------------------------------");
 
-        for (Map.Entry entry : resume.getSections().entrySet()) {
+        for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
             System.out.println(entry);
         }
     }
@@ -37,8 +37,8 @@ public class ResumeTestData {
         return contacts;
     }
 
-    private static Map<SectionType, Section> getSections() {
-        Map<SectionType, Section> sections = new HashMap<>();
+    private static Map<SectionType, AbstractSection> getSections() {
+        Map<SectionType, AbstractSection> sections = new HashMap<>();
 
         TextSection objective = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
         TextSection personal = new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
