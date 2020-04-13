@@ -3,14 +3,21 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * gkislin
+ * 22.07.2016
+ */
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private File directory;
+
+    protected abstract void doWrite(Resume r, OutputStream os) throws IOException;
+
+    protected abstract Resume doRead(InputStream is) throws IOException;
 
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -28,29 +35,32 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
-                file.delete();
+                doDelete(file);
             }
         }
     }
 
     @Override
     public int size() {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            return files.length;
+        String[] list = directory.list();
+        if (list == null) {
+            throw new StorageException("Directory read error", null);
         }
-        return 0;
+        return list.length;
     }
 
     @Override
-    protected File getID(String uuid) {
+    protected File getSearchKey(String uuid) {
         return new File(directory, uuid);
     }
 
     @Override
-    protected void factualUpdate(Resume r, File file) {
-        delete(r.getUuid());
-        save(r);
+    protected void doUpdate(Resume r, File file) {
+        try {
+            doWrite(r, new BufferedOutputStream(new FileOutputStream(file)));
+        } catch (IOException e) {
+            throw new StorageException("File write error", r.getUuid(), e);
+        }
     }
 
     @Override
@@ -59,45 +69,41 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void factualSave(Resume r, File file) {
+    protected void doSave(Resume r, File file) {
         try {
             file.createNewFile();
-            doWrite(r, file);
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("Couldn't create file " + file.getAbsolutePath(), file.getName(), e);
+        }
+        doUpdate(r, file);
+    }
+
+    @Override
+    protected Resume doGet(File file) {
+        try {
+            return doRead(new BufferedInputStream(new FileInputStream(file)));
+        } catch (IOException e) {
+            throw new StorageException("File read error", file.getName(), e);
         }
     }
 
     @Override
-    protected Resume factualGet(File file) {
-        return doGet(file);
-    }
-
-    @Override
-    protected void factualDelete(File file) {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File f : files) {
-                if (file.getName().equals(f.getName())) {
-                    f.delete();
-                }
-            }
+    protected void doDelete(File file) {
+        if (!file.delete()) {
+            throw new StorageException("File delete error", file.getName());
         }
     }
 
     @Override
-    protected List<Resume> getResumeList() {
-        List<Resume> list = new ArrayList<>();
+    protected List<Resume> doCopyAll() {
         File[] files = directory.listFiles();
-        if (files != null) {
-            for (File f : files) {
-                list.add(doGet(f));
-            }
+        if (files == null) {
+            throw new StorageException("Directory read error", null);
+        }
+        List<Resume> list = new ArrayList<>(files.length);
+        for (File file : files) {
+            list.add(doGet(file));
         }
         return list;
     }
-
-    protected abstract void doWrite(Resume r, File file) throws IOException;
-
-    protected abstract Resume doGet(File file);
 }

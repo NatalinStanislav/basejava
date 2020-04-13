@@ -19,7 +19,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected Integer getID(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < resumeList.size(); i++) {
             if (resumeList.get(i).getUuid().equals(uuid)) {
                 return i;
@@ -29,22 +29,22 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected void factualUpdate(Resume resume, Integer index) {
+    protected void doUpdate(Resume resume, Integer index) {
         resumeList.set(index, resume);
     }
 
     @Override
-    protected void factualSave(Resume resume, Integer index) {
+    protected void doSave(Resume resume, Integer index) {
         resumeList.add(resume);
     }
 
     @Override
-    protected void factualDelete(Integer index) {
+    protected void doDelete(Integer index) {
         resumeList.remove(index.intValue());
     }
 
     @Override
-    protected Resume factualGet(Integer index) {
+    protected Resume doGet(Integer index) {
         return resumeList.get(index);
     }
 
@@ -54,7 +54,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected List<Resume> getResumeList() {
+    protected List<Resume> doCopyAll() {
         return new ArrayList<>(resumeList);
     }
 }

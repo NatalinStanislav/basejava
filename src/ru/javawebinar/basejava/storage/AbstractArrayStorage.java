@@ -23,11 +23,11 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         size = 0;
     }
 
-    protected void factualUpdate(Resume resume, Integer index) {
+    protected void doUpdate(Resume resume, Integer index) {
         storage[index] = resume;
     }
 
-    protected void factualSave(Resume resume, Integer index) {
+    protected void doSave(Resume resume, Integer index) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         } else {
@@ -36,13 +36,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         }
     }
 
-    protected void factualDelete(Integer index) {
+    protected void doDelete(Integer index) {
         fillDeletedElement(index);
         storage[size - 1] = null;
         size--;
     }
 
-    protected Resume factualGet(Integer index) {
+    protected Resume doGet(Integer index) {
         return storage[index];
     }
 
@@ -51,7 +51,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
         return index >= 0;
     }
 
-    protected List<Resume> getResumeList() {
+    protected List<Resume> doCopyAll() {
         return Arrays.asList(Arrays.copyOf(storage, size));
     }
 

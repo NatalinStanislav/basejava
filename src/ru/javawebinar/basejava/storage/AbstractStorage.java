@@ -16,36 +16,36 @@ public abstract class AbstractStorage<T> implements Storage {
     public void update(Resume resume) {
         LOG.info("Update " + resume);
         T iD = validateResumeNotExist(resume.getUuid());
-        factualUpdate(resume, iD);
+        doUpdate(resume, iD);
     }
 
     public void save(Resume resume) {
         LOG.info("Save " + resume);
         T iD = validateResumeExist(resume.getUuid());
-        factualSave(resume, iD);
+        doSave(resume, iD);
     }
 
     public void delete(String uuid) {
         LOG.info("Delete " + uuid);
         T iD = validateResumeNotExist(uuid);
-        factualDelete(iD);
+        doDelete(iD);
     }
 
     public Resume get(String uuid) {
         LOG.info("Get " + uuid);
         T iD = validateResumeNotExist(uuid);
-        return factualGet(iD);
+        return doGet(iD);
     }
 
     public List<Resume> getAllSorted() {
         LOG.info("getAllSorted");
-        List<Resume> list = getResumeList();
+        List<Resume> list = doCopyAll();
         Collections.sort(list);
         return list;
     }
 
     protected T validateResumeNotExist(String uuid) {
-        T iD = getID(uuid);
+        T iD = getSearchKey(uuid);
         if (!isExist(iD)) {
             LOG.warning("Resume " + uuid + " not exist");
             throw new NotExistStorageException(uuid);
@@ -54,7 +54,7 @@ public abstract class AbstractStorage<T> implements Storage {
     }
 
     protected T validateResumeExist(String uuid) {
-        T iD = getID(uuid);
+        T iD = getSearchKey(uuid);
         if (isExist(iD)) {
             LOG.warning("Resume " + uuid + " already exist");
             throw new ExistStorageException(uuid);
@@ -62,17 +62,17 @@ public abstract class AbstractStorage<T> implements Storage {
         return iD;
     }
 
-    protected abstract T getID(String uuid);
+    protected abstract T getSearchKey(String uuid);
 
-    protected abstract void factualUpdate(Resume resume, T iD);
+    protected abstract void doUpdate(Resume resume, T iD);
 
-    protected abstract void factualSave(Resume resume, T iD);
+    protected abstract void doSave(Resume resume, T iD);
 
-    protected abstract void factualDelete(T iD);
+    protected abstract void doDelete(T iD);
 
-    protected abstract Resume factualGet(T iD);
+    protected abstract Resume doGet(T iD);
 
     protected abstract boolean isExist(T iD);
 
-    protected abstract List<Resume> getResumeList();
+    protected abstract List<Resume> doCopyAll();
 }
