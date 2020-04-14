@@ -2,11 +2,10 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.storage.strategy.ObjectStreamSerializationStrategy;
 
-import java.io.*;
 
-public class ObjectStreamStorage extends AbstractFileStorage {
-    protected ObjectStreamStorage(File directory) {
-        super(directory);
+public class ObjectStreamPathStorage extends AbstractPathStorage {
+    public ObjectStreamPathStorage(String dir) {
+        super(dir);
         strategy = new ObjectStreamSerializationStrategy();
     }
 }

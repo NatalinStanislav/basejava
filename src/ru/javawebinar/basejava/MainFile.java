@@ -33,20 +33,26 @@ public class MainFile {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        printDirectoryDeeply(dir);
+
+        System.out.println("======================================================================");
+        printDirectoryDeeply(dir, 0);
     }
 
     // TODO: make pretty output
-    public static void printDirectoryDeeply(File dir) {
+    public static void printDirectoryDeeply(File dir, int deepLevel) {
         File[] files = dir.listFiles();
 
         if (files != null) {
             for (File file : files) {
+                for (int i = 0; i < deepLevel; i++) {
+                    System.out.print(" ");
+                }
                 if (file.isFile()) {
                     System.out.println("File: " + file.getName());
                 } else if (file.isDirectory()) {
+                    int level = deepLevel + 1;
                     System.out.println("Directory: " + file.getName());
-                    printDirectoryDeeply(file);
+                    printDirectoryDeeply(file, level);
                 }
             }
         }
