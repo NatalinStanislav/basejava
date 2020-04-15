@@ -16,10 +16,11 @@ import java.util.Objects;
  */
 public class FileStorage extends AbstractStorage<File> {
     private File directory;
-    protected SerializationStrategy strategy = new ObjectStreamSerializationStrategy();
+    private SerializationStrategy strategy;
 
-    protected FileStorage(File directory) {
+    protected FileStorage(File directory, SerializationStrategy strategy) {
         Objects.requireNonNull(directory, "directory must not be null");
+        Objects.requireNonNull(strategy, "strategy must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -27,6 +28,11 @@ public class FileStorage extends AbstractStorage<File> {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
+        this.strategy = strategy;
+    }
+
+    public void setStrategy(SerializationStrategy strategy) {
+        this.strategy = strategy;
     }
 
     @Override

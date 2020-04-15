@@ -16,14 +16,20 @@ import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
-    protected SerializationStrategy strategy = new ObjectStreamSerializationStrategy();
+    private SerializationStrategy strategy;
 
-    protected PathStorage(String dir) {
+    protected PathStorage(String dir, SerializationStrategy strategy) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
+        Objects.requireNonNull(strategy, "strategy must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
         }
+        this.strategy = strategy;
+    }
+
+    public void setStrategy(SerializationStrategy strategy) {
+        this.strategy = strategy;
     }
 
     @Override
