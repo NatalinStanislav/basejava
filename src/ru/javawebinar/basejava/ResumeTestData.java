@@ -59,7 +59,7 @@ public class ResumeTestData {
                                 new Organization.Position(2013, Month.OCTOBER, "Автор проекта.\n", "Создание, организация и проведение Java онлайн проектов и стажировок.")),
                         new Organization("Wrike", "https://www.wrike.com/",
                                 new Organization.Position(2014, Month.OCTOBER, 2016, Month.JANUARY, "Старший разработчик (backend)\n", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.")),
-                        new Organization("RIT Center", null,
+                        new Organization("RIT Center", "",
                                 new Organization.Position(2012, Month.APRIL, 2014, Month.OCTOBER, "Java архитектор\n", "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python")),
                         new Organization("Luxoft (Deutsche Bank)", "https://www.luxoft.com/",
                                 new Organization.Position(2010, Month.DECEMBER, 2012, Month.APRIL, "Ведущий программист\n", "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.")),
@@ -74,19 +74,19 @@ public class ResumeTestData {
         R1.addSection(SectionType.EDUCATION,
                 new OrganizationSection(
                         new Organization("Coursera", "https://www.coursera.org/learn/progfun1",
-                                new Organization.Position(2013, Month.MARCH, 2013, Month.MAY, "\"Functional Programming Principles in Scala\" by Martin Odersky", null)),
+                                new Organization.Position(2013, Month.MARCH, 2013, Month.MAY, "\"Functional Programming Principles in Scala\" by Martin Odersky", "")),
                         new Organization("Luxoft", "https://www.luxoft-training.ru/kurs/obektno-orientirovannyy_analiz_i_proektirovanie_na_uml.html",
-                                new Organization.Position(2011, Month.MARCH, 2011, Month.APRIL, "\tКурс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"", null)),
+                                new Organization.Position(2011, Month.MARCH, 2011, Month.APRIL, "\tКурс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"", "")),
                         new Organization("Siemens AG", "https://new.siemens.com/ru/ru.html",
-                                new Organization.Position(2005, Month.JANUARY, 2005, Month.APRIL, "3 месяца обучения мобильным IN сетям (Берлин)", null)),
+                                new Organization.Position(2005, Month.JANUARY, 2005, Month.APRIL, "3 месяца обучения мобильным IN сетям (Берлин)", "")),
                         new Organization("Alcatel", "http://www.alcatel.ru/",
-                                new Organization.Position(1997, Month.SEPTEMBER, 1998, Month.MARCH, "6 месяцев обучения цифровым телефонным сетям (Москва)", null)),
+                                new Organization.Position(1997, Month.SEPTEMBER, 1998, Month.MARCH, "6 месяцев обучения цифровым телефонным сетям (Москва)", "")),
                         new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "https://itmo.ru/ru/",
-                                new Organization.Position(1993, Month.SEPTEMBER, 1996, Month.JULY, "Аспирантура (программист С, С++)", null),
-                                new Organization.Position(1987, Month.SEPTEMBER, 1993, Month.JULY, "Инженер (программист Fortran, C)", null)),
+                                new Organization.Position(1993, Month.SEPTEMBER, 1996, Month.JULY, "Аспирантура (программист С, С++)", ""),
+                                new Organization.Position(1987, Month.SEPTEMBER, 1993, Month.JULY, "Инженер (программист Fortran, C)", "")),
                         new Organization("Заочная физико-техническая школа при МФТИ", "http://www.school.mipt.ru/",
-                                new Organization.Position(1984, Month.SEPTEMBER, 1987, Month.JUNE, "Закончил с отличием", null))
-                        ));
+                                new Organization.Position(1984, Month.SEPTEMBER, 1987, Month.JUNE, "Закончил с отличием", ""))
+                ));
 
 
         R2.addContact(ContactType.SKYPE, "skype2");
