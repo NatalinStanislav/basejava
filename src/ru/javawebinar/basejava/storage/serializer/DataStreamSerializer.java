@@ -1,12 +1,11 @@
 package ru.javawebinar.basejava.storage.serializer;
 
 import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.util.CustomDataWriter;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamSerializer implements StreamSerializer {
 
@@ -17,61 +16,60 @@ public class DataStreamSerializer implements StreamSerializer {
             dos.writeUTF(r.getFullName());
             Map<ContactType, String> contacts = r.getContacts();
             dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }
+            writeWithException(contacts.entrySet(), dos, (data, dataOutputStream) -> {
+                dataOutputStream.writeUTF(data.getKey().name());
+                dataOutputStream.writeUTF(data.getValue());
+            });
 
             Map<SectionType, AbstractSection> sections = r.getSections();
             dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                AbstractSection section = entry.getValue();
-                String sectionClass = section.getClass().getSimpleName();
-                dos.writeUTF(sectionClass);
-                switch (sectionClass) {
-                    case "TextSection":
-                        dos.writeUTF(((TextSection) section).getContent());
+            writeWithException(sections.entrySet(), dos, (data, dataOutputStream) -> {
+                String key = data.getKey().name();
+                dataOutputStream.writeUTF(key);
+                AbstractSection section = data.getValue();
+                switch (key) {
+                    case "PERSONAL":
+                    case "OBJECTIVE":
+                        dataOutputStream.writeUTF(((TextSection) section).getContent());
                         break;
-                    case "ListSection": {
+                    case "ACHIEVEMENT":
+                    case "QUALIFICATIONS": {
                         int size = ((ListSection) section).getItems().size();
-                        dos.writeInt(size);
-                        for (String str : ((ListSection) section).getItems()) {
-                            dos.writeUTF(str);
-                        }
+                        dataOutputStream.writeInt(size);
+                        writeWithException(((ListSection) section).getItems(), dataOutputStream, (data2, dataOutputStream2) ->
+                                dataOutputStream2.writeUTF(data2));
                         break;
                     }
-                    case "OrganizationSection": {
+                    case "EXPERIENCE":
+                    case "EDUCATION": {
                         int size = ((OrganizationSection) section).getOrganizations().size();
-                        dos.writeInt(size);
-                        for (int i = 0; i < size; i++) {
-                            Organization organization = ((OrganizationSection) section).getOrganizations().get(i);
-                            dos.writeUTF(organization.getHomePage().getName());
-                            String url = organization.getHomePage().getUrl();
+                        dataOutputStream.writeInt(size);
+                        writeWithException(((OrganizationSection) section).getOrganizations(), dataOutputStream, (data2, dataOutputStream2) -> {
+                            dataOutputStream2.writeUTF(data2.getHomePage().getName());
+                            String url = data2.getHomePage().getUrl();
                             if (url == null) {
-                                dos.writeUTF("null#value");
+                                dataOutputStream2.writeUTF("null#value");
                             } else {
-                                dos.writeUTF(url);
+                                dataOutputStream2.writeUTF(url);
                             }
-                            int listSize = organization.getPositions().size();
-                            dos.writeInt(listSize);
-                            for (int j = 0; j < listSize; j++) {
-                                Organization.Position position = ((OrganizationSection) section).getOrganizations().get(i).getPositions().get(j);
-                                dos.writeUTF(position.getStartDate().toString());
-                                dos.writeUTF(position.getEndDate().toString());
-                                dos.writeUTF(position.getTitle());
-                                String description = position.getDescription();
+                            int listSize = data2.getPositions().size();
+                            dataOutputStream2.writeInt(listSize);
+                            writeWithException(data2.getPositions(), dataOutputStream2, (data3, dataOutputStream3) -> {
+                                dataOutputStream3.writeUTF(data3.getStartDate().toString());
+                                dataOutputStream3.writeUTF(data3.getEndDate().toString());
+                                dataOutputStream3.writeUTF(data3.getTitle());
+                                String description = data3.getDescription();
                                 if (description == null) {
-                                    dos.writeUTF("null#value");
+                                    dataOutputStream3.writeUTF("null#value");
                                 } else {
-                                    dos.writeUTF(description);
+                                    dataOutputStream3.writeUTF(description);
                                 }
-                            }
-                        }
+                            });
+                        });
                         break;
                     }
                 }
-            }
+            });
         }
     }
 
@@ -89,13 +87,14 @@ public class DataStreamSerializer implements StreamSerializer {
             int mapSize = dis.readInt();
             for (int i = 0; i < mapSize; i++) {
                 String key = dis.readUTF();
-                String nameSection = dis.readUTF();
                 AbstractSection section = null;
-                switch (nameSection) {
-                    case "TextSection":
+                switch (key) {
+                    case "PERSONAL":
+                    case "OBJECTIVE":
                         section = new TextSection(dis.readUTF());
                         break;
-                    case "ListSection": {
+                    case "ACHIEVEMENT":
+                    case "QUALIFICATIONS": {
                         int listSize = dis.readInt();
                         List<String> items = new ArrayList<>(listSize);
                         for (int j = 0; j < listSize; j++) {
@@ -104,7 +103,8 @@ public class DataStreamSerializer implements StreamSerializer {
                         section = new ListSection(items);
                         break;
                     }
-                    case "OrganizationSection": {
+                    case "EXPERIENCE":
+                    case "EDUCATION": {
                         int listSize = dis.readInt();
                         List<Organization> organizations = new ArrayList<>(listSize);
                         for (int j = 0; j < listSize; j++) {
@@ -135,6 +135,16 @@ public class DataStreamSerializer implements StreamSerializer {
                 resume.addSection(SectionType.valueOf(key), section);
             }
             return resume;
+        }
+    }
+
+    private <T> void writeWithException(Collection<T> collection, DataOutputStream dataOutputStream, CustomDataWriter<T> writer) throws IOException {
+        Objects.requireNonNull(collection);
+        Objects.requireNonNull(dataOutputStream);
+        Objects.requireNonNull(writer);
+
+        for (T t : collection) {
+            writer.writeFromCollection(t, dataOutputStream);
         }
     }
 }
