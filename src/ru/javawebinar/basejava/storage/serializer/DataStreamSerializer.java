@@ -48,7 +48,7 @@ public class DataStreamSerializer implements StreamSerializer {
                             dos.writeUTF(data2.getHomePage().getName());
                             String url = data2.getHomePage().getUrl();
                             if (url == null) {
-                                dos.writeUTF("null#value");
+                                dos.writeUTF("");
                             } else {
                                 dos.writeUTF(url);
                             }
@@ -60,7 +60,7 @@ public class DataStreamSerializer implements StreamSerializer {
                                 dos.writeUTF(data3.getTitle());
                                 String description = data3.getDescription();
                                 if (description == null) {
-                                    dos.writeUTF("null#value");
+                                    dos.writeUTF("");
                                 } else {
                                     dos.writeUTF(description);
                                 }
@@ -79,10 +79,10 @@ public class DataStreamSerializer implements StreamSerializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            readWithException(dis.readInt(), dis, () ->
+            readWithException(dis, () ->
                     resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
 
-            readWithException(dis.readInt(), dis, () -> {
+            readWithException(dis, () -> {
                 String key = dis.readUTF();
                 AbstractSection section = null;
                 switch (key) {
@@ -93,27 +93,27 @@ public class DataStreamSerializer implements StreamSerializer {
                     case "ACHIEVEMENT":
                     case "QUALIFICATIONS": {
                         List<String> items = new ArrayList<>();
-                        readWithException(dis.readInt(), dis, () -> items.add(dis.readUTF()));
+                        readWithException(dis, () -> items.add(dis.readUTF()));
                         section = new ListSection(items);
                         break;
                     }
                     case "EXPERIENCE":
                     case "EDUCATION": {
                         List<Organization> organizations = new ArrayList<>();
-                        readWithException(dis.readInt(), dis, () -> {
+                        readWithException(dis, () -> {
                             String name = dis.readUTF();
                             String url = dis.readUTF();
-                            if (url.equals("null#value")) {
+                            if (url.equals("")) {
                                 url = null;
                             }
                             Link link = new Link(name, url);
                             List<Organization.Position> positions = new ArrayList<>();
-                            readWithException(dis.readInt(), dis, () -> {
+                            readWithException(dis, () -> {
                                 String startDate = dis.readUTF();
                                 String endDate = dis.readUTF();
                                 String title = dis.readUTF();
                                 String description = dis.readUTF();
-                                if (description.equals("null#value")) {
+                                if (description.equals("")) {
                                     description = null;
                                 }
                                 positions.add(new Organization.Position(LocalDate.parse(startDate), LocalDate.parse(endDate), title, description));
@@ -140,11 +140,12 @@ public class DataStreamSerializer implements StreamSerializer {
         }
     }
 
-    private void readWithException(int size, DataInputStream dataInputStream, CustomDataReader reader) throws IOException {
+    private void readWithException(DataInputStream dataInputStream, CustomDataReader reader) throws IOException {
         Objects.requireNonNull(dataInputStream);
         Objects.requireNonNull(reader);
+        int j = dataInputStream.readInt();
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < j; i++) {
             reader.readFromDIS();
         }
     }
