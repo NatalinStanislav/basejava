@@ -1,6 +1,7 @@
 package ru.javawebinar.basejava.storage.serializer;
 
 import ru.javawebinar.basejava.model.*;
+import ru.javawebinar.basejava.util.CustomDataReader;
 import ru.javawebinar.basejava.util.CustomDataWriter;
 
 import java.io.*;
@@ -16,53 +17,52 @@ public class DataStreamSerializer implements StreamSerializer {
             dos.writeUTF(r.getFullName());
             Map<ContactType, String> contacts = r.getContacts();
             dos.writeInt(contacts.size());
-            writeWithException(contacts.entrySet(), dos, (data, dataOutputStream) -> {
-                dataOutputStream.writeUTF(data.getKey().name());
-                dataOutputStream.writeUTF(data.getValue());
+            writeWithException(contacts.entrySet(), dos, (data) -> {
+                dos.writeUTF(data.getKey().name());
+                dos.writeUTF(data.getValue());
             });
 
             Map<SectionType, AbstractSection> sections = r.getSections();
             dos.writeInt(sections.size());
-            writeWithException(sections.entrySet(), dos, (data, dataOutputStream) -> {
+            writeWithException(sections.entrySet(), dos, (data) -> {
                 String key = data.getKey().name();
-                dataOutputStream.writeUTF(key);
+                dos.writeUTF(key);
                 AbstractSection section = data.getValue();
                 switch (key) {
                     case "PERSONAL":
                     case "OBJECTIVE":
-                        dataOutputStream.writeUTF(((TextSection) section).getContent());
+                        dos.writeUTF(((TextSection) section).getContent());
                         break;
                     case "ACHIEVEMENT":
                     case "QUALIFICATIONS": {
                         int size = ((ListSection) section).getItems().size();
-                        dataOutputStream.writeInt(size);
-                        writeWithException(((ListSection) section).getItems(), dataOutputStream, (data2, dataOutputStream2) ->
-                                dataOutputStream2.writeUTF(data2));
+                        dos.writeInt(size);
+                        writeWithException(((ListSection) section).getItems(), dos, dos::writeUTF);
                         break;
                     }
                     case "EXPERIENCE":
                     case "EDUCATION": {
                         int size = ((OrganizationSection) section).getOrganizations().size();
-                        dataOutputStream.writeInt(size);
-                        writeWithException(((OrganizationSection) section).getOrganizations(), dataOutputStream, (data2, dataOutputStream2) -> {
-                            dataOutputStream2.writeUTF(data2.getHomePage().getName());
+                        dos.writeInt(size);
+                        writeWithException(((OrganizationSection) section).getOrganizations(), dos, (data2) -> {
+                            dos.writeUTF(data2.getHomePage().getName());
                             String url = data2.getHomePage().getUrl();
                             if (url == null) {
-                                dataOutputStream2.writeUTF("null#value");
+                                dos.writeUTF("null#value");
                             } else {
-                                dataOutputStream2.writeUTF(url);
+                                dos.writeUTF(url);
                             }
                             int listSize = data2.getPositions().size();
-                            dataOutputStream2.writeInt(listSize);
-                            writeWithException(data2.getPositions(), dataOutputStream2, (data3, dataOutputStream3) -> {
-                                dataOutputStream3.writeUTF(data3.getStartDate().toString());
-                                dataOutputStream3.writeUTF(data3.getEndDate().toString());
-                                dataOutputStream3.writeUTF(data3.getTitle());
+                            dos.writeInt(listSize);
+                            writeWithException(data2.getPositions(), dos, (data3) -> {
+                                dos.writeUTF(data3.getStartDate().toString());
+                                dos.writeUTF(data3.getEndDate().toString());
+                                dos.writeUTF(data3.getTitle());
                                 String description = data3.getDescription();
                                 if (description == null) {
-                                    dataOutputStream3.writeUTF("null#value");
+                                    dos.writeUTF("null#value");
                                 } else {
-                                    dataOutputStream3.writeUTF(description);
+                                    dos.writeUTF(description);
                                 }
                             });
                         });
@@ -79,13 +79,10 @@ public class DataStreamSerializer implements StreamSerializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
+            readWithException(dis.readInt(), dis, () ->
+                    resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
 
-            int mapSize = dis.readInt();
-            for (int i = 0; i < mapSize; i++) {
+            readWithException(dis.readInt(), dis, () -> {
                 String key = dis.readUTF();
                 AbstractSection section = null;
                 switch (key) {
@@ -95,28 +92,23 @@ public class DataStreamSerializer implements StreamSerializer {
                         break;
                     case "ACHIEVEMENT":
                     case "QUALIFICATIONS": {
-                        int listSize = dis.readInt();
-                        List<String> items = new ArrayList<>(listSize);
-                        for (int j = 0; j < listSize; j++) {
-                            items.add(dis.readUTF());
-                        }
+                        List<String> items = new ArrayList<>();
+                        readWithException(dis.readInt(), dis, () -> items.add(dis.readUTF()));
                         section = new ListSection(items);
                         break;
                     }
                     case "EXPERIENCE":
                     case "EDUCATION": {
-                        int listSize = dis.readInt();
-                        List<Organization> organizations = new ArrayList<>(listSize);
-                        for (int j = 0; j < listSize; j++) {
+                        List<Organization> organizations = new ArrayList<>();
+                        readWithException(dis.readInt(), dis, () -> {
                             String name = dis.readUTF();
                             String url = dis.readUTF();
                             if (url.equals("null#value")) {
                                 url = null;
                             }
                             Link link = new Link(name, url);
-                            int positionsSize = dis.readInt();
-                            List<Organization.Position> positions = new ArrayList<>(positionsSize);
-                            for (int k = 0; k < positionsSize; k++) {
+                            List<Organization.Position> positions = new ArrayList<>();
+                            readWithException(dis.readInt(), dis, () -> {
                                 String startDate = dis.readUTF();
                                 String endDate = dis.readUTF();
                                 String title = dis.readUTF();
@@ -125,15 +117,15 @@ public class DataStreamSerializer implements StreamSerializer {
                                     description = null;
                                 }
                                 positions.add(new Organization.Position(LocalDate.parse(startDate), LocalDate.parse(endDate), title, description));
-                            }
+                            });
                             organizations.add(new Organization(link, positions));
-                        }
+                        });
                         section = new OrganizationSection(organizations);
                         break;
                     }
                 }
                 resume.addSection(SectionType.valueOf(key), section);
-            }
+            });
             return resume;
         }
     }
@@ -144,7 +136,16 @@ public class DataStreamSerializer implements StreamSerializer {
         Objects.requireNonNull(writer);
 
         for (T t : collection) {
-            writer.writeFromCollection(t, dataOutputStream);
+            writer.writeFromCollection(t);
+        }
+    }
+
+    private void readWithException(int size, DataInputStream dataInputStream, CustomDataReader reader) throws IOException {
+        Objects.requireNonNull(dataInputStream);
+        Objects.requireNonNull(reader);
+
+        for (int i = 0; i < size; i++) {
+            reader.readFromDIS();
         }
     }
 }
