@@ -1,8 +1,6 @@
 package ru.javawebinar.basejava.storage.serializer;
 
 import ru.javawebinar.basejava.model.*;
-import ru.javawebinar.basejava.util.CustomDataReader;
-import ru.javawebinar.basejava.util.CustomDataWriter;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -16,15 +14,12 @@ public class DataStreamSerializer implements StreamSerializer {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
             Map<ContactType, String> contacts = r.getContacts();
-            dos.writeInt(contacts.size());
             writeWithException(contacts.entrySet(), dos, (data) -> {
                 dos.writeUTF(data.getKey().name());
                 dos.writeUTF(data.getValue());
             });
 
-            Map<SectionType, AbstractSection> sections = r.getSections();
-            dos.writeInt(sections.size());
-            writeWithException(sections.entrySet(), dos, (data) -> {
+            writeWithException(r.getSections().entrySet(), dos, (data) -> {
                 String key = data.getKey().name();
                 dos.writeUTF(key);
                 AbstractSection section = data.getValue();
@@ -35,15 +30,11 @@ public class DataStreamSerializer implements StreamSerializer {
                         break;
                     case "ACHIEVEMENT":
                     case "QUALIFICATIONS": {
-                        int size = ((ListSection) section).getItems().size();
-                        dos.writeInt(size);
                         writeWithException(((ListSection) section).getItems(), dos, dos::writeUTF);
                         break;
                     }
                     case "EXPERIENCE":
                     case "EDUCATION": {
-                        int size = ((OrganizationSection) section).getOrganizations().size();
-                        dos.writeInt(size);
                         writeWithException(((OrganizationSection) section).getOrganizations(), dos, (data2) -> {
                             dos.writeUTF(data2.getHomePage().getName());
                             String url = data2.getHomePage().getUrl();
@@ -52,8 +43,6 @@ public class DataStreamSerializer implements StreamSerializer {
                             } else {
                                 dos.writeUTF(url);
                             }
-                            int listSize = data2.getPositions().size();
-                            dos.writeInt(listSize);
                             writeWithException(data2.getPositions(), dos, (data3) -> {
                                 dos.writeUTF(data3.getStartDate().toString());
                                 dos.writeUTF(data3.getEndDate().toString());
@@ -135,6 +124,7 @@ public class DataStreamSerializer implements StreamSerializer {
         Objects.requireNonNull(dataOutputStream);
         Objects.requireNonNull(writer);
 
+        dataOutputStream.writeInt(collection.size());
         for (T t : collection) {
             writer.writeFromCollection(t);
         }
@@ -148,5 +138,13 @@ public class DataStreamSerializer implements StreamSerializer {
         for (int i = 0; i < j; i++) {
             reader.readFromDIS();
         }
+    }
+
+    private interface CustomDataReader {
+        void readFromDIS() throws IOException;
+    }
+
+    private interface CustomDataWriter<T> {
+        void writeFromCollection(T data) throws IOException;
     }
 }
