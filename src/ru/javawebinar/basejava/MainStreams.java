@@ -1,11 +1,12 @@
 package ru.javawebinar.basejava;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MainStreams {
 
     public static void main(String[] args) {
-        int[] spam = new int[]{0, 1, 1, 1, 9, 9, 9, 5, 5};
+        int[] spam = new int[]{0, 1, 1, 1, 3, 9, 9, 9, 5, 5};
         System.out.println(minValue(spam));
 
         List<Integer> integers = new ArrayList<>();
@@ -23,37 +24,23 @@ public class MainStreams {
 
     public static int minValue(int[] values) {
         return Arrays.stream(values)
-                .boxed()
                 .distinct()
-                .sorted(Comparator.reverseOrder())
-                .reduce((acc, x) -> {
-                    int k = 10;
-                    for (int i = acc; i / 10 > 0; i = i / 10) {
-                        k *= 10;
-                    }
-                    return acc + k * x;
-                })
-                .get();
+                .sorted()
+                .reduce((acc, x) -> acc * 10 + x)
+                .getAsInt();
     }
 
     public static List<Integer> oddOrEven(List<Integer> integers) {
-        List<Integer> oddList = new ArrayList<>();
-        List<Integer> evenList = new ArrayList<>();
+        Map<Boolean, List<Integer>> map = integers.stream()
+                .collect(Collectors.partitioningBy(p -> p % 2 == 0));
         int sum = integers.stream()
-                .peek(e -> {
-                    if (e % 2 == 0) {
-                        evenList.add(e);
-                    } else {
-                        oddList.add(e);
-                    }
-                })
-                .reduce(Integer::sum)
-                .get();
+                .mapToInt(t -> t)
+                .sum();
+        System.out.println(sum);
         if (sum % 2 == 0) {
-            integers.removeAll(evenList);
+            return map.get(false);
         } else {
-            integers.removeAll(oddList);
+            return map.get(true);
         }
-        return integers;
     }
 }
