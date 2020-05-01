@@ -29,4 +29,16 @@ public class Config {
     public File getStorageDir() {
         return storageDir;
     }
+
+    public String getURL() {
+        return props.getProperty("db.url");
+    }
+
+    public String getUser() {
+        return props.getProperty("db.user");
+    }
+
+    public String getPassword() {
+        return props.getProperty("db.password");
+    }
 }
