@@ -22,7 +22,7 @@ public class ResumeTestData {
         R3 = new Resume(UUID_3, "Name3");
         R4 = new Resume(UUID_4, "Name4");
 
-        R1.addContact(ContactType.PHONE, "+7(921) 855-0482");
+        /*R1.addContact(ContactType.PHONE, "+7(921) 855-0482");
         R1.addContact(ContactType.SKYPE, "grigory.kislin");
         R1.addContact(ContactType.MAIL, "gkislin@yandex.ru");
         R1.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
@@ -94,6 +94,6 @@ public class ResumeTestData {
         R1.addSection(SectionType.EXPERIENCE,
                 new OrganizationSection(
                         new Organization("Organization2", "http://Organization2.ru",
-                                new Organization.Position(2015, Month.JANUARY, "position1", "content1"))));
+                                new Organization.Position(2015, Month.JANUARY, "position1", "content1"))));*/
     }
 }

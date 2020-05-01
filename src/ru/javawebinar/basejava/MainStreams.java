@@ -36,11 +36,6 @@ public class MainStreams {
         int sum = integers.stream()
                 .mapToInt(t -> t)
                 .sum();
-        System.out.println(sum);
-        if (sum % 2 == 0) {
-            return map.get(false);
-        } else {
-            return map.get(true);
-        }
+        return map.get(!(sum % 2 == 0));
     }
 }
