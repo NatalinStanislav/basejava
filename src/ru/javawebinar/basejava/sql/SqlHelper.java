@@ -1,8 +1,6 @@
-package ru.javawebinar.basejava.util;
+package ru.javawebinar.basejava.sql;
 
 import ru.javawebinar.basejava.exception.StorageException;
-import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.sql.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +14,7 @@ public class SqlHelper {
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     }
 
-    public Resume execute(String query, ABlockOfCode aBlockOfCode) {
+    public <T> T execute(String query, ABlockOfCode<T> aBlockOfCode) {
         try (Connection conn = connectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             return aBlockOfCode.execute(ps);
