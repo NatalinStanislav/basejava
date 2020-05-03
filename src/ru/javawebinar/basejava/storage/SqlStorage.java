@@ -38,37 +38,39 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume r) {
-        if (!isInDB(r.getUuid())) {
-            throw new NotExistStorageException(r.getUuid());
-        }
         helper.execute("UPDATE resume SET full_name = ? WHERE uuid = ?", (ps) -> {
             ps.setString(1, r.getFullName());
             ps.setString(2, r.getUuid());
-            ps.execute();
+            if (ps.executeUpdate() == 0) {
+                throw new NotExistStorageException(r.getUuid());
+            }
             return null;
         });
     }
 
     @Override
     public void save(Resume r) {
-        if (isInDB(r.getUuid())) {
-            throw new ExistStorageException(r.getUuid());
-        }
         helper.execute("INSERT INTO resume (uuid, full_name) VALUES (?,?)", (ps) -> {
             ps.setString(1, r.getUuid());
             ps.setString(2, r.getFullName());
-            ps.execute();
+            try {
+                ps.execute();
+            } catch (SQLException e) {
+                if (e.getSQLState().equals("23505")) {
+                    throw new ExistStorageException(r.getUuid());
+                }
+            }
             return null;
         });
     }
 
     @Override
     public void delete(String uuid) {
-        if (!isInDB(uuid)) {
-            throw new NotExistStorageException(uuid);
-        }
         helper.execute("DELETE FROM resume r WHERE r.uuid =?", (ps) -> {
             ps.setString(1, uuid);
+            if (ps.executeUpdate() == 0) {
+                throw new NotExistStorageException(uuid);
+            }
             ps.execute();
             return null;
         });
@@ -93,17 +95,5 @@ public class SqlStorage implements Storage {
             rs.next();
             return Integer.parseInt(rs.getString(1));
         });
-    }
-
-    private boolean isInDB(String uuid) {
-        return helper.execute("SELECT uuid FROM resume", (ps) -> {
-            List<String> list = new ArrayList<>();
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(rs.getString("uuid").trim());
-            }
-            list.forEach(System.out::println);
-            return list;
-        }).contains(uuid);
     }
 }
