@@ -23,7 +23,7 @@ public class ResumeTestData {
         R3 = new Resume(UUID_3, "Name3");
         R4 = new Resume(UUID_4, "Name4");
 
-        /*R1.addContact(ContactType.PHONE, "+7(921) 855-0482");
+        R1.addContact(ContactType.PHONE, "+7(921) 855-0482");
         R1.addContact(ContactType.SKYPE, "grigory.kislin");
         R1.addContact(ContactType.MAIL, "gkislin@yandex.ru");
         R1.addContact(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
@@ -31,7 +31,7 @@ public class ResumeTestData {
         R1.addContact(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473/grigory-kislin");
         R1.addContact(ContactType.HOME_PAGE, "http://gkislin.ru/");
 
-        R1.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
+        /*R1.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));
         R1.addSection(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
         R1.addSection(SectionType.ACHIEVEMENT, new ListSection("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", \"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.\n"
                 , "Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.\n"
@@ -87,12 +87,15 @@ public class ResumeTestData {
                                 new Organization.Position(1987, Month.SEPTEMBER, 1993, Month.JULY, "Инженер (программист Fortran, C)", null)),
                         new Organization("Заочная физико-техническая школа при МФТИ", "http://www.school.mipt.ru/",
                                 new Organization.Position(1984, Month.SEPTEMBER, 1987, Month.JUNE, "Закончил с отличием", null))
-                ));
+                ));*/
 
 
         R2.addContact(ContactType.SKYPE, "skype2");
         R2.addContact(ContactType.PHONE, "22222");
-        R1.addSection(SectionType.EXPERIENCE,
+        R3.addContact(ContactType.PHONE, "333-33-33");
+        R4.addContact(ContactType.PHONE, "600-00-00");
+
+        /*R1.addSection(SectionType.EXPERIENCE,
                 new OrganizationSection(
                         new Organization("Organization2", "http://Organization2.ru",
                                 new Organization.Position(2015, Month.JANUARY, "position1", "content1"))));*/
