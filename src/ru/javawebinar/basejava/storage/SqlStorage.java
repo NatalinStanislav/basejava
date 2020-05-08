@@ -6,9 +6,7 @@ import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.sql.SqlHelper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SqlStorage implements Storage {
     public final SqlHelper sqlHelper;
@@ -91,28 +89,26 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        List<Resume> resumes = new ArrayList<>();
-        sqlHelper.execute("SELECT * FROM resume r ORDER BY full_name,uuid", ps -> {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                resumes.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
-            }
-            return null;
-        });
-        sqlHelper.execute("SELECT * FROM contact", ps -> {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                String uuid = rs.getString("resume_uuid");
-                for (Resume resume : resumes) {
-                    if (resume.getUuid().equals(uuid)) {
-                        resume.addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
-                        break;
-                    }
+        Map<String, Resume> resumes = new HashMap<>();
+        sqlHelper.transactionalExecute(conn -> {
+            try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM resume r ORDER BY full_name,uuid")) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    resumes.put(resultSet.getString("uuid"), new Resume(resultSet.getString("uuid"), resultSet.getString("full_name")));
                 }
             }
-            return null;
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String uuid = rs.getString("resume_uuid");
+                    resumes.get(uuid).addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
+                }
+                return null;
+            }
         });
-        return resumes;
+        List<Resume> list = new ArrayList<>(resumes.values());
+        Collections.sort(list);
+        return list;
     }
 
     @Override
