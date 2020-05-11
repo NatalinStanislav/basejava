@@ -49,4 +49,14 @@ public class ListSection extends AbstractSection {
     public int hashCode() {
         return items.hashCode();
     }
+
+    @Override
+    public String getSQLValue() {
+        StringBuilder sb = new StringBuilder();
+        for (String str: items) {
+            sb.append(str).append("\n");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        return sb.toString();
+    }
 }
