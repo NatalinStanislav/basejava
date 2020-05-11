@@ -36,8 +36,8 @@ public class SqlStorage implements Storage {
                     Resume r = new Resume(uuid, rs.getString("full_name"));
                     do {
                         String value = rs.getString("value");
-                        ContactType type = ContactType.valueOf(rs.getString("type"));
-                        r.addContact(type, value);
+                        if (value != null)
+                            r.addContact(ContactType.valueOf(rs.getString("type")), value);
                     } while (rs.next());
                     return r;
                 });
@@ -89,7 +89,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        Map<String, Resume> resumes = new HashMap<>();
+        Map<String, Resume> resumes = new LinkedHashMap<>();
         sqlHelper.transactionalExecute(conn -> {
             try (PreparedStatement preparedStatement = conn.prepareStatement("SELECT * FROM resume r ORDER BY full_name,uuid")) {
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -101,14 +101,13 @@ public class SqlStorage implements Storage {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     String uuid = rs.getString("resume_uuid");
-                    resumes.get(uuid).addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
+                    if (rs.getString("type") != null)
+                        resumes.get(uuid).addContact(ContactType.valueOf(rs.getString("type")), rs.getString("value"));
                 }
                 return null;
             }
         });
-        List<Resume> list = new ArrayList<>(resumes.values());
-        Collections.sort(list);
-        return list;
+        return new ArrayList<>(resumes.values());
     }
 
     @Override
