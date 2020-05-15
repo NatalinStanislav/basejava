@@ -52,9 +52,4 @@ public class OrganizationSection extends AbstractSection {
     public String toString() {
         return organizations.toString();
     }
-
-    @Override
-    public String getSQLValue() {
-        return null;
-    }
 }

@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.web;
 
 import ru.javawebinar.basejava.Config;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.Storage;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,13 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ResumeServlet extends HttpServlet {
-    static {
-        try {
-            Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
+    private Storage storage = Config.get().getStorage();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
 
@@ -32,10 +27,10 @@ public class ResumeServlet extends HttpServlet {
             str.append("<tr><td>")
                     .append(uuid)
                     .append("</td><td>")
-                    .append(Config.get().getStorage().get(uuid).getFullName())
+                    .append(storage.get(uuid).getFullName())
                     .append("</td></tr>");
         } else {
-            for (Resume resume : Config.get().getStorage().getAllSorted()) {
+            for (Resume resume : storage.getAllSorted()) {
                 str.append("<tr><td>")
                         .append(resume.getUuid())
                         .append("</td><td>")

@@ -36,9 +36,4 @@ public class TextSection extends AbstractSection {
     public int hashCode() {
         return content.hashCode();
     }
-
-    @Override
-    public String getSQLValue() {
-        return content;
-    }
 }
