@@ -54,7 +54,7 @@ public class ResumeTestData {
                 , "администрирование Hudson/Jenkins, Ant + custom task, SoapUI, JPublisher, Flyway, Nagios, iReport, OpenCmis, Bonita, pgBouncer."
                 , "Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, архитектурных шаблонов, UML, функционального программирования"
                 , "Родной русский, английский \"upper intermediate\""));
-        /*R1.addSection(SectionType.EXPERIENCE,
+        R1.addSection(SectionType.EXPERIENCE,
                 new OrganizationSection(
                         new Organization("Java Online Projects", "http://javaops.ru/",
                                 new Organization.Position(2013, Month.OCTOBER, "Автор проекта.\n", "Создание, организация и проведение Java онлайн проектов и стажировок.")),
@@ -87,7 +87,7 @@ public class ResumeTestData {
                                 new Organization.Position(1987, Month.SEPTEMBER, 1993, Month.JULY, "Инженер (программист Fortran, C)", null)),
                         new Organization("Заочная физико-техническая школа при МФТИ", "http://www.school.mipt.ru/",
                                 new Organization.Position(1984, Month.SEPTEMBER, 1987, Month.JUNE, "Закончил с отличием", null))
-                ));*/
+                ));
 
 
         R2.addContact(ContactType.SKYPE, "skype2");
@@ -99,10 +99,5 @@ public class ResumeTestData {
 
         R4.addContact(ContactType.PHONE, "600-00-00");
         R4.addSection(SectionType.OBJECTIVE, new TextSection("Ведущий свадеб"));
-
-        /*R1.addSection(SectionType.EXPERIENCE,
-                new OrganizationSection(
-                        new Organization("Organization2", "http://Organization2.ru",
-                                new Organization.Position(2015, Month.JANUARY, "position1", "content1"))));*/
     }
 }
