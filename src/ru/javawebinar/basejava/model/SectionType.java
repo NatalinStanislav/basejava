@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.Arrays;
+
 public enum SectionType {
     PERSONAL("Личные качества"),
     OBJECTIVE("Позиция"),
@@ -16,5 +18,10 @@ public enum SectionType {
 
     public String getTitle() {
         return title;
+    }
+
+    public static SectionType[] firstFourValues() {
+        SectionType[] array = Arrays.copyOfRange(SectionType.values(), 0, 4);
+        return array;
     }
 }

@@ -2,6 +2,8 @@ package ru.javawebinar.basejava.util;
 
 import ru.javawebinar.basejava.model.*;
 
+import java.time.LocalDate;
+
 public class SectionUtil {
     public static String sectionToHTML(SectionType type, AbstractSection section) {
         StringBuilder sectionHTML = new StringBuilder();
@@ -75,5 +77,51 @@ public class SectionUtil {
         }
         return section;
     }
+
+    public static String orgNameToText(OrganizationSection section, int index) {
+        if (section == null || section.getOrganizations() == null || index >= section.getOrganizations().size())
+            return "";
+        return section.getOrganizations().get(index).getHomePage().getName();
+    }
+
+    public static String orgUrlToText(OrganizationSection section, int index) {
+        if (section == null || section.getOrganizations() == null || index >= section.getOrganizations().size())
+            return "";
+        return section.getOrganizations().get(index).getHomePage().getUrl();
+    }
+
+    public static String orgPositionToText(OrganizationSection section, int indexOrg, int indexPos) {
+        if (section == null || section.getOrganizations() == null || indexOrg >= section.getOrganizations().size())
+            return "";
+        return section.getOrganizations().get(indexOrg).getPositions().get(indexPos).getTitle();
+    }
+
+    public static LocalDate orgPositionStartDate(OrganizationSection section, int indexOrg, int indexPos) {
+        if (section == null || section.getOrganizations() == null || indexOrg >= section.getOrganizations().size())
+            return null;
+        return section.getOrganizations().get(indexOrg).getPositions().get(indexPos).getStartDate();
+    }
+
+    public static LocalDate orgPositionEndDate(OrganizationSection section, int indexOrg, int indexPos) {
+        if (section == null || section.getOrganizations() == null || indexOrg >= section.getOrganizations().size())
+            return null;
+        if (section.getOrganizations().get(indexOrg).getPositions().get(indexPos).getEndDate().equals(DateUtil.NOW))
+            return LocalDate.now();
+        return section.getOrganizations().get(indexOrg).getPositions().get(indexPos).getEndDate();
+    }
+
+    public static String orgPositionDescriptionToText(OrganizationSection section, int indexOrg, int indexPos) {
+        if (section == null || section.getOrganizations() == null || indexOrg >= section.getOrganizations().size())
+            return "";
+        return section.getOrganizations().get(indexOrg).getPositions().get(indexPos).getDescription();
+    }
+
+    public static boolean isItLastPosition(OrganizationSection section, int indexOrg, int indexPos) {
+        if (section == null || section.getOrganizations() == null || indexOrg >= section.getOrganizations().size())
+            return true;
+        return section.getOrganizations().get(indexOrg).getPositions().size() - 1 == indexPos;
+    }
+
+
 }
 
