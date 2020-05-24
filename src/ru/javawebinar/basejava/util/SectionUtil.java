@@ -3,6 +3,8 @@ package ru.javawebinar.basejava.util;
 import ru.javawebinar.basejava.model.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SectionUtil {
     public static String sectionToHTML(SectionType type, AbstractSection section) {
@@ -32,7 +34,8 @@ public class SectionUtil {
                                 .append("</b> ")
                                 .append(position.getTitle())
                                 .append("<br/>")
-                                .append(position.getDescription() == null ? "" : position.getDescription());
+                                .append(position.getDescription() == null ? "" : position.getDescription())
+                                .append("<br/>");
                     }
                     sectionHTML.append("<br/>");
                 }
@@ -54,9 +57,6 @@ public class SectionUtil {
                 if (section != null) {
                     sectionToArea.append(String.join("\n", ((ListSection) section).getItems()));
                 }
-                break;
-            case EXPERIENCE:
-            case EDUCATION:
         }
         return sectionToArea.toString();
     }
@@ -71,9 +71,6 @@ public class SectionUtil {
             case ACHIEVEMENT:
             case QUALIFICATIONS:
                 section = new ListSection(value.split("\n"));
-                break;
-            case EXPERIENCE:
-            case EDUCATION:
         }
         return section;
     }
@@ -116,12 +113,34 @@ public class SectionUtil {
         return section.getOrganizations().get(indexOrg).getPositions().get(indexPos).getDescription();
     }
 
-    public static boolean isItLastPosition(OrganizationSection section, int indexOrg, int indexPos) {
-        if (section == null || section.getOrganizations() == null || indexOrg >= section.getOrganizations().size())
-            return true;
-        return section.getOrganizations().get(indexOrg).getPositions().size() - 1 == indexPos;
+    public static boolean isOrgSection(SectionType type) {
+        switch (type) {
+            case PERSONAL:
+            case OBJECTIVE:
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+            default:
+                return false;
+            case EXPERIENCE:
+            case EDUCATION:
+                return true;
+        }
     }
 
+    public static List<Organization> getOrgList(Resume resume, SectionType type) {
+        if (resume.getSection(type) == null) {
+            return null;
+        }
+        return ((OrganizationSection) (resume.getSection(type))).getOrganizations();
+    }
 
+    public static int orgIndex(ArrayList<Organization> list, Link link) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getHomePage().equals(link)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
 

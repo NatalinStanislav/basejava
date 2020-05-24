@@ -75,18 +75,18 @@ public class ResumeTestData {
         R1.addSection(SectionType.EDUCATION,
                 new OrganizationSection(
                         new Organization("Coursera", "https://www.coursera.org/learn/progfun1",
-                                new Organization.Position(2013, Month.MARCH, 2013, Month.MAY, "\"Functional Programming Principles in Scala\" by Martin Odersky", null)),
+                                new Organization.Position(2013, Month.MARCH, 2013, Month.MAY, "Слушатель", "\"Functional Programming Principles in Scala\" by Martin Odersky")),
                         new Organization("Luxoft", "https://www.luxoft-training.ru/kurs/obektno-orientirovannyy_analiz_i_proektirovanie_na_uml.html",
-                                new Organization.Position(2011, Month.MARCH, 2011, Month.APRIL, "\tКурс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"", null)),
+                                new Organization.Position(2011, Month.MARCH, 2011, Month.APRIL, "Слушатель", "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"")),
                         new Organization("Siemens AG", "https://new.siemens.com/ru/ru.html",
-                                new Organization.Position(2005, Month.JANUARY, 2005, Month.APRIL, "3 месяца обучения мобильным IN сетям (Берлин)", null)),
+                                new Organization.Position(2005, Month.JANUARY, 2005, Month.APRIL, "Студент", "3 месяца обучения мобильным IN сетям (Берлин)")),
                         new Organization("Alcatel", "http://www.alcatel.ru/",
-                                new Organization.Position(1997, Month.SEPTEMBER, 1998, Month.MARCH, "6 месяцев обучения цифровым телефонным сетям (Москва)", null)),
+                                new Organization.Position(1997, Month.SEPTEMBER, 1998, Month.MARCH, "Студент", "6 месяцев обучения цифровым телефонным сетям (Москва)")),
                         new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "https://itmo.ru/ru/",
-                                new Organization.Position(1993, Month.SEPTEMBER, 1996, Month.JULY, "Аспирантура (программист С, С++)", null),
-                                new Organization.Position(1987, Month.SEPTEMBER, 1993, Month.JULY, "Инженер (программист Fortran, C)", null)),
+                                new Organization.Position(1993, Month.SEPTEMBER, 1996, Month.JULY, "Аспирант", "Аспирантура (программист С, С++)"),
+                                new Organization.Position(1987, Month.SEPTEMBER, 1993, Month.JULY, "Инженер", "Инженер (программист Fortran, C)")),
                         new Organization("Заочная физико-техническая школа при МФТИ", "http://www.school.mipt.ru/",
-                                new Organization.Position(1984, Month.SEPTEMBER, 1987, Month.JUNE, "Закончил с отличием", null))
+                                new Organization.Position(1984, Month.SEPTEMBER, 1987, Month.JUNE, "Ученик", "Закончил с отличием"))
                 ));
 
 
