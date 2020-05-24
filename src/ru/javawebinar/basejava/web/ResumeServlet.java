@@ -54,7 +54,7 @@ public class ResumeServlet extends HttpServlet {
                 }
             } else {
                 ArrayList<Organization> organizations = new ArrayList<>();
-                for (int i = 0; i < Integer.parseInt(request.getParameter(type.name() + "orgCount")); i++) {
+                for (int i = 0; i < Integer.parseInt(request.getParameter(type.name() + "orgCount")) + 1; i++) {
                     ArrayList<Organization.Position> positions = new ArrayList<>();
                     String orgName = request.getParameter(type.name() + "OrganizationName" + i);
                     if (orgName.trim().length() == 0) {
@@ -62,7 +62,7 @@ public class ResumeServlet extends HttpServlet {
                     }
                     String orgUrl = request.getParameter(type.name() + "OrganizationLink" + i);
                     Link link = new Link(orgName, orgUrl);
-                    for (int j = 0; j < Integer.parseInt(request.getParameter(type.name() + "posCount" + i)); j++) {
+                    for (int j = 0; j < Integer.parseInt(request.getParameter(type.name() + "posCount" + i)) + 1; j++) {
                         String position = request.getParameter(type.name() + "Position" + i + j);
                         String start = request.getParameter(type.name() + "StartDate" + i + j);
                         String end = request.getParameter(type.name() + "EndDate" + i + j);
@@ -75,28 +75,6 @@ public class ResumeServlet extends HttpServlet {
                         positions.add(new Organization.Position(startDate, endDate, position, description));
                     }
                     if (positions.size() != 0) {
-                        organizations.add(new Organization(link, positions));
-                    }
-                }
-
-                for (int i = 1; i < 6; i++) {
-                    String orgName = request.getParameter(type.name() + "addOrganizationName" + i);
-                    String orgUrl = request.getParameter(type.name() + "addOrganizationLink" + i);
-                    String position = request.getParameter(type.name() + "addPosition" + i);
-                    String start = request.getParameter(type.name() + "addStartDate" + i);
-                    String end = request.getParameter(type.name() + "addEndDate" + i);
-                    String description = request.getParameter(type.name() + "addDescription" + i);
-                    if (orgName.trim().length() == 0 || position.trim().length() == 0 || start.trim().length() == 0 || end.trim().length() == 0) {
-                        continue;
-                    }
-                    Link link = new Link(orgName, orgUrl);
-                    Organization.Position pos = new Organization.Position(LocalDate.parse(start), LocalDate.parse(end), position, description);
-                    int index = SectionUtil.orgIndex(organizations, link);
-                    if (index != -1) {
-                        organizations.get(index).getPositions().add(pos);
-                    } else {
-                        ArrayList<Organization.Position> positions = new ArrayList<>();
-                        positions.add(pos);
                         organizations.add(new Organization(link, positions));
                     }
                 }

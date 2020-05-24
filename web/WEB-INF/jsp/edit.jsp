@@ -40,15 +40,15 @@
                     </dl>
                 </c:when>
                 <c:otherwise>
-                    <p><b>${type.title}</b></p>
+                    <h3><b>${type.title}:</b></h3>
                     <c:set var="orgId" value='0'/>
                     <c:forEach var="org" items="${SectionUtil.getOrgList(resume, type)}">
                         <c:set var="positionId" value="0"/>
+                        <label><b>Организация: </b><input type="text" name="${type.name()}OrganizationName${orgId}"
+                                                          value="${SectionUtil.orgNameToText(resume.getSection(type),orgId)}"/></label>
+                        <label>Адрес http:// <input type="text" name="${type.name()}OrganizationLink${orgId}"
+                                                    value="${SectionUtil.orgUrlToText(resume.getSection(type),orgId)}"/></label><br/>
                         <c:forEach var="pos" items="${org.getPositions()}">
-                            <label>Организация: <input type="text" name="${type.name()}OrganizationName${orgId}"
-                                                       value="${SectionUtil.orgNameToText(resume.getSection(type),orgId)}"/></label>
-                            <label>Адрес http:// <input type="text" name="${type.name()}OrganizationLink${orgId}"
-                                                        value="${SectionUtil.orgUrlToText(resume.getSection(type),orgId)}"/></label>
                             <label>Позиция: <input type="text" name="${type.name()}Position${orgId}${positionId}"
                                                    value="${SectionUtil.orgPositionToText(resume.getSection(type),orgId,positionId)}"/></label><br/>
                             <label>Начало: <input type="date" name="${type.name()}StartDate${orgId}${positionId}"
@@ -56,25 +56,34 @@
                             <label>Конец: <input type="date" name="${type.name()}EndDate${orgId}${positionId}"
                                                  value="${SectionUtil.orgPositionEndDate(resume.getSection(type),orgId,positionId)}"/></label><br/>
                             <label>Описание: <textarea name="${type.name()}Description${orgId}${positionId}" rows="5"
-                                                       cols="95">${SectionUtil.orgPositionDescriptionToText(resume.getSection(type),orgId,positionId)}</textarea></label><br/><br/><br/>
+                                                       cols="95">${SectionUtil.orgPositionDescriptionToText(resume.getSection(type),orgId,positionId)}</textarea></label><br/>
                             <c:set var="positionId" value="${positionId + 1}"/>
                         </c:forEach>
+                        <b><em>Добавить новую позицию:</em></b><br/>
+                        <label>Позиция: <input type="text"
+                                               name="${type.name()}Position${orgId}${positionId}"/></label><br/>
+                        <label>Начало: <input type="date" name="${type.name()}StartDate${orgId}${positionId}"/></label>
+                        <label>Конец: <input type="date"
+                                             name="${type.name()}EndDate${orgId}${positionId}"/></label><br/>
+                        <label>Описание: <textarea name="${type.name()}Description${orgId}${positionId}" rows="5"
+                                                   cols="95"></textarea></label><br/>
+                        <br/><br/>
                         <input type="hidden" name="${type.name()}posCount${orgId}" value="${positionId}">
                         <c:set var="orgId" value="${orgId + 1}"/>
                     </c:forEach>
                     <input type="hidden" name="${type.name()}orgCount" value="${orgId}">
-                    <b><em>Добавить позиции в раздел "${type.title}:"</em></b><br/><br/>
-                    <c:forEach begin="0" end="4" varStatus="loop">
-                        <label>Организация: <input type="text"
-                                                   name="${type.name()}addOrganizationName${loop.count}"/></label>
-                        <label>Адрес http:// <input type="text" name="${type.name()}addOrganizationLink${loop.count}"/></label>
-                        <label>Позиция: <input type="text" name="${type.name()}addPosition${loop.count}"/></label><br/>
-                        <label>Начало: <input type="date" name="${type.name()}addStartDate${loop.count}"/></label>
-                        <label>Конец: <input type="date" name="${type.name()}addEndDate${loop.count}"/></label><br/>
-                        <label>Описание: <textarea name="${type.name()}addDescription${loop.count}" rows="5"
-                                                   cols="95"></textarea></label><br/><br/><br/>
-                    </c:forEach>
+                    <b><em>Добавить новую организацию в раздел "${type.title}:"</em></b><br/><br/>
+                    <c:set var="positionId" value="0"/>
+                    <input type="hidden" name="${type.name()}posCount${orgId}" value="${positionId}">
 
+                    <label><b>Организация: </b><input type="text"
+                                                      name="${type.name()}OrganizationName${orgId}"/></label>
+                    <label>Адрес http:// <input type="text" name="${type.name()}OrganizationLink${orgId}"/></label>
+                    <label>Позиция: <input type="text" name="${type.name()}Position${orgId}${positionId}"/></label><br/>
+                    <label>Начало: <input type="date" name="${type.name()}StartDate${orgId}${positionId}"/></label>
+                    <label>Конец: <input type="date" name="${type.name()}EndDate${orgId}${positionId}"/></label><br/>
+                    <label>Описание: <textarea name="${type.name()}Description${orgId}${positionId}" rows="5"
+                                               cols="95"></textarea></label><br/><br/><br/>
                 </c:otherwise>
             </c:choose>
         </c:forEach>
