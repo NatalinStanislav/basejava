@@ -90,7 +90,12 @@
 
         <hr>
         <button type="submit">Сохранить</button>
-        <button onclick="window.history.back()">Отменить</button>
+        <input
+                action="action"
+                onclick="window.history.go(-1); return false;"
+                type="submit"
+                value="Отменить"
+        />
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
